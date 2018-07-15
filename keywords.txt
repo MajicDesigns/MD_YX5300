@@ -1,0 +1,69 @@
+#######################################
+# Syntax Coloring Map
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MD_YX5300	KEYWORD1
+cbData	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+setDebounceTime	KEYWORD2
+begin	KEYWORD2
+check	KEYWORD2
+setSynchronous	KEYWORD2
+setTimeout	KEYWORD2
+setCallback	KEYWORD2
+getStatus	KEYWORD2
+getError	KEYWORD2
+getErrData	KEYWORD2
+playNext	KEYWORD2
+playPrev	KEYWORD2
+playStop	KEYWORD2
+playPause	KEYWORD2
+playStart	KEYWORD2
+playTrack	KEYWORD2
+playShuffle	KEYWORD2
+playRepeat	KEYWORD2
+playSpecific	KEYWORD2
+playFolderCycle	KEYWORD2
+playFolderFile	KEYWORD2
+volume	KEYWORD2
+volumeInc	KEYWORD2
+volumeDec	KEYWORD2
+volumeMute	KEYWORD2
+volumeQuery	KEYWORD2
+device	KEYWORD2
+sleep	KEYWORD2
+wakeUp	KEYWORD2
+reset	KEYWORD2
+queryStatus	KEYWORD2
+queryVolume	KEYWORD2
+queryEqualizer	KEYWORD2
+queryFolderTracks	KEYWORD2
+queryFolderCount	KEYWORD2
+queryTracksCount	KEYWORD2
+queryTrack	KEYWORD2
+
+######################################
+# Constants (LITERAL1)
+#######################################
+
+STS_OK	LITERAL1
+STS_TIMEOUT	LITERAL1
+STS_TF_INSERT	LITERAL1
+STS_TF_REMOVE	LITERAL1
+STS_ERR	LITERAL1
+STS_ACK_OK	LITERAL1
+STS_FILE_END	LITERAL1
+STS_STATUS	LITERAL1
+STS_VOLUME	LITERAL1
+STS_TOT_FILES	LITERAL1
+STS_PLAYING	LITERAL1
+STS_FLDR_FILES	LITERAL1
+STS_TOT_FLDR	LITERAL1
