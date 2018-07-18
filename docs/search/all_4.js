@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['getstatus',['getStatus',['../class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa',1,'MD_YX5300']]],
-  ['getstscode',['getStsCode',['../class_m_d___y_x5300.html#a69bd000aaa227c34b2c05b81335b32d0',1,'MD_YX5300']]],
-  ['getstsdata',['getStsData',['../class_m_d___y_x5300.html#a3dec2e50d80681969f5a398a98cabec2',1,'MD_YX5300']]]
+  ['equalizer',['equalizer',['../class_m_d___y_x5300.html#aa206a022a1730267b7507de3cee01166',1,'MD_YX5300']]]
 ];

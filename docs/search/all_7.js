@@ -1,16 +1,7 @@
 var searchData=
 [
-  ['playfolderrepeat',['playFolderRepeat',['../class_m_d___y_x5300.html#ac4e428e2bdac097e5a98cc24a511dc7a',1,'MD_YX5300']]],
-  ['playnext',['playNext',['../class_m_d___y_x5300.html#af3e9b9030322a26ff92714483b53d716',1,'MD_YX5300']]],
-  ['playpause',['playPause',['../class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924',1,'MD_YX5300']]],
-  ['playprev',['playPrev',['../class_m_d___y_x5300.html#a3ee071be1cd0c392b8ff48ef1cde0302',1,'MD_YX5300']]],
-  ['playrepeat',['playRepeat',['../class_m_d___y_x5300.html#a2d930bba1dc6f356d6cfa6b4edeca0ec',1,'MD_YX5300']]],
-  ['playshuffle',['playShuffle',['../class_m_d___y_x5300.html#a96fd12ba21566f00c9e27cfe687a9f8d',1,'MD_YX5300']]],
-  ['playspecific',['playSpecific',['../class_m_d___y_x5300.html#a5ec582d13ae704876e7f3269e4594d16',1,'MD_YX5300']]],
-  ['playstart',['playStart',['../class_m_d___y_x5300.html#a58d590fe7ee8901a523a3e451ea63fcb',1,'MD_YX5300']]],
-  ['playstop',['playStop',['../class_m_d___y_x5300.html#ac9de2edce27deb744e231b662147f4a5',1,'MD_YX5300']]],
-  ['playtrack',['playTrack',['../class_m_d___y_x5300.html#af9a464f2cdbd272be42aac185283a755',1,'MD_YX5300']]],
-  ['print',['PRINT',['../_m_d___y_x5300_8cpp.html#a1696fc35fb931f8c876786fbc1078ac4',1,'MD_YX5300.cpp']]],
-  ['prints',['PRINTS',['../_m_d___y_x5300_8cpp.html#ad68f35c3cfe67be8d09d1cea8e788e13',1,'MD_YX5300.cpp']]],
-  ['printx',['PRINTX',['../_m_d___y_x5300_8cpp.html#abf55b44e8497cbc3addccdeb294138cc',1,'MD_YX5300.cpp']]]
+  ['md_5fyx5300',['MD_YX5300',['../class_m_d___y_x5300.html',1,'MD_YX5300'],['../class_m_d___y_x5300.html#aaa0f78c6cb1c17a4a8198342aaa3ab19',1,'MD_YX5300::MD_YX5300()']]],
+  ['md_5fyx5300_2ecpp',['MD_YX5300.cpp',['../_m_d___y_x5300_8cpp.html',1,'']]],
+  ['md_5fyx5300_2eh',['MD_YX5300.h',['../_m_d___y_x5300_8h.html',1,'']]],
+  ['managing_20communications',['Managing Communications',['../page_software.html',1,'index']]]
 ];

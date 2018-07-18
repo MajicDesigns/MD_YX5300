@@ -24,7 +24,7 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "MD_YX5300 Library", "index.html", [
-    [ "Arduino LED Matrix Panel Library", "index.html", "index" ],
+    [ "Arduino Serial MP3 Player", "index.html", "index" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],

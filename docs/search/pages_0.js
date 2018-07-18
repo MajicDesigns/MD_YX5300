@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['arduino_20led_20matrix_20panel_20library',['Arduino LED Matrix Panel Library',['../index.html',1,'']]]
+  ['arduino_20serial_20mp3_20player',['Arduino Serial MP3 Player',['../index.html',1,'']]]
 ];

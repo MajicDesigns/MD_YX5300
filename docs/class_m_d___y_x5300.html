@@ -113,17 +113,19 @@ Public Types</h2></td></tr>
 <a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba63d42f065f496ca09cf216e73830d1db">STS_TF_INSERT</a> = 0x3a, 
 <a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512baf8358b143c53d30e75de521b2cb4bcd8">STS_TF_REMOVE</a> = 0x3b, 
 <br />
-&#160;&#160;<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512bad62235fd6df325ef101749659b6af0fc">STS_ERR</a> = 0x40, 
+&#160;&#160;<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba34905554d8be656d86fa14d854b72afc">STS_FILE_END</a> = 0x3d, 
+<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba5609be6c63ac8c590390b73c9926f21b">STS_INIT</a> = 0x3f, 
+<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba6f0d55b0646e3e4a6f655a5f9dc86177">STS_ERR_FILE</a> = 0x40, 
 <a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba9429c68210c18436582ddcad9f19ca4a">STS_ACK_OK</a> = 0x41, 
-<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba34905554d8be656d86fa14d854b72afc">STS_FILE_END</a> = 0x3d, 
-<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512baca3823362d2959b0613584b91106d61a">STS_STATUS</a> = 0x42, 
 <br />
-&#160;&#160;<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512bac3f38519b25798d40533537e6cf3e4f5">STS_VOLUME</a> = 0x43, 
+&#160;&#160;<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512baca3823362d2959b0613584b91106d61a">STS_STATUS</a> = 0x42, 
+<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512bac3f38519b25798d40533537e6cf3e4f5">STS_VOLUME</a> = 0x43, 
+<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512baa5f2df087496f66cc31e95eb2c1a630f">STS_EQUALIZER</a> = 0x44, 
 <a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba33d63619bb3341c6007a9b905ddfa645">STS_TOT_FILES</a> = 0x48, 
-<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba1922f6e9d62779d6ac5cbc4df293bcbd">STS_PLAYING</a> = 0x4c, 
-<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512bab8aa303a7afdbb7aa6e9914969143504">STS_FLDR_FILES</a> = 0x4e, 
 <br />
-&#160;&#160;<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba07fd10675a659729ce2a7479593c98f4">STS_TOT_FLDR</a> = 0x4f
+&#160;&#160;<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba1922f6e9d62779d6ac5cbc4df293bcbd">STS_PLAYING</a> = 0x4c, 
+<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512bab8aa303a7afdbb7aa6e9914969143504">STS_FLDR_FILES</a> = 0x4e, 
+<a class="el" href="class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba07fd10675a659729ce2a7479593c98f4">STS_TOT_FLDR</a> = 0x4f
 <br />
  }</td></tr>
 <tr class="separator:aea3c10a359e2e1e317685f969533512b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,10 +156,16 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Methods for device management.</div></td></tr>
 <tr class="memitem:a07cee7bde12e3f1eb82469e46915a7f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a07cee7bde12e3f1eb82469e46915a7f4">device</a> (uint8_t devId)</td></tr>
 <tr class="separator:a07cee7bde12e3f1eb82469e46915a7f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa206a022a1730267b7507de3cee01166"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#aa206a022a1730267b7507de3cee01166">equalizer</a> (uint8_t eqId)</td></tr>
+<tr class="separator:aa206a022a1730267b7507de3cee01166"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79c7629e0cd075e00a881e7bfc7d9bf5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a79c7629e0cd075e00a881e7bfc7d9bf5">sleep</a> (void)</td></tr>
 <tr class="separator:a79c7629e0cd075e00a881e7bfc7d9bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac95da482fb1e64997aa8b7dcb76dd985"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#ac95da482fb1e64997aa8b7dcb76dd985">wakeUp</a> (void)</td></tr>
 <tr class="separator:ac95da482fb1e64997aa8b7dcb76dd985"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7c8011ae2633a85be3a4f533e3ba765"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#af7c8011ae2633a85be3a4f533e3ba765">shuffle</a> (bool b)</td></tr>
+<tr class="separator:af7c8011ae2633a85be3a4f533e3ba765"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af67dbf80a1e685053375a58917192e61"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#af67dbf80a1e685053375a58917192e61">repeat</a> (bool b)</td></tr>
+<tr class="separator:af67dbf80a1e685053375a58917192e61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81bde77454931b59e3e8825620ae9609"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a81bde77454931b59e3e8825620ae9609">reset</a> (void)</td></tr>
 <tr class="separator:a81bde77454931b59e3e8825620ae9609"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Methods for controlling playing MP3 files.</div></td></tr>
@@ -173,14 +181,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a58d590fe7ee8901a523a3e451ea63fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9a464f2cdbd272be42aac185283a755"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#af9a464f2cdbd272be42aac185283a755">playTrack</a> (uint8_t t)</td></tr>
 <tr class="separator:af9a464f2cdbd272be42aac185283a755"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96fd12ba21566f00c9e27cfe687a9f8d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a96fd12ba21566f00c9e27cfe687a9f8d">playShuffle</a> (bool b)</td></tr>
-<tr class="separator:a96fd12ba21566f00c9e27cfe687a9f8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d930bba1dc6f356d6cfa6b4edeca0ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a2d930bba1dc6f356d6cfa6b4edeca0ec">playRepeat</a> (bool b)</td></tr>
-<tr class="separator:a2d930bba1dc6f356d6cfa6b4edeca0ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3aac294a327f0a049614a878ae9a42dc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a3aac294a327f0a049614a878ae9a42dc">playTrackRepeat</a> (uint8_t file)</td></tr>
+<tr class="separator:a3aac294a327f0a049614a878ae9a42dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ec582d13ae704876e7f3269e4594d16"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a5ec582d13ae704876e7f3269e4594d16">playSpecific</a> (uint8_t fldr, uint8_t file)</td></tr>
 <tr class="separator:a5ec582d13ae704876e7f3269e4594d16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4e428e2bdac097e5a98cc24a511dc7a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#ac4e428e2bdac097e5a98cc24a511dc7a">playFolderRepeat</a> (uint8_t folder)</td></tr>
 <tr class="separator:ac4e428e2bdac097e5a98cc24a511dc7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f915c5de0c9464a460eaa849c684125"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a4f915c5de0c9464a460eaa849c684125">playFolderShuffle</a> (uint8_t folder)</td></tr>
+<tr class="separator:a4f915c5de0c9464a460eaa849c684125"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Methods for controlling MP3 output volume.</div></td></tr>
 <tr class="memitem:a5f10f8c36adecf5c2dcd71b3fae06c4f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a5f10f8c36adecf5c2dcd71b3fae06c4f">volume</a> (uint8_t vol)</td></tr>
 <tr class="separator:a5f10f8c36adecf5c2dcd71b3fae06c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,21 +201,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a457552976582293dfe58b2b76ea31999"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a457552976582293dfe58b2b76ea31999">volumeQuery</a> (void)</td></tr>
 <tr class="separator:a457552976582293dfe58b2b76ea31999"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Methods for querying MP3 device parameters.</div></td></tr>
-<tr class="memitem:a0023cf7faa718fa2d1df1b987f523246"><td class="memItemLeft" align="right" valign="top"><a id="a0023cf7faa718fa2d1df1b987f523246"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void)</td></tr>
+<tr class="memitem:a0023cf7faa718fa2d1df1b987f523246"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a0023cf7faa718fa2d1df1b987f523246">queryStatus</a> (void)</td></tr>
 <tr class="separator:a0023cf7faa718fa2d1df1b987f523246"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9661a453395b9932cf6273ce266aabc5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a9661a453395b9932cf6273ce266aabc5">queryVolume</a> (void)</td></tr>
 <tr class="separator:a9661a453395b9932cf6273ce266aabc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdf43733be6cffa357c3e19131f95de9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#acdf43733be6cffa357c3e19131f95de9">queryEqualizer</a> (void)</td></tr>
 <tr class="separator:acdf43733be6cffa357c3e19131f95de9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6a86736ed1c900018b3c25198c621d7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#af6a86736ed1c900018b3c25198c621d7">queryFolderTracks</a> (uint8_t folder)</td></tr>
-<tr class="separator:af6a86736ed1c900018b3c25198c621d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac33b2da1090c677f328359f56d4d1e9b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#ac33b2da1090c677f328359f56d4d1e9b">queryFolderFiles</a> (uint8_t folder)</td></tr>
+<tr class="separator:ac33b2da1090c677f328359f56d4d1e9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc347ca613ecd302360ba8abdd6c72a2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#adc347ca613ecd302360ba8abdd6c72a2">queryFolderCount</a> (void)</td></tr>
 <tr class="separator:adc347ca613ecd302360ba8abdd6c72a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab9540d3ccbe82913d49a7c2f5849479"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#aab9540d3ccbe82913d49a7c2f5849479">queryTracksCount</a> (void)</td></tr>
-<tr class="separator:aab9540d3ccbe82913d49a7c2f5849479"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3354d8054013157853481e5d50568fc8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a3354d8054013157853481e5d50568fc8">queryTrack</a> (void)</td></tr>
-<tr class="separator:a3354d8054013157853481e5d50568fc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a886332e00d117d2395e39a28ac4a6963"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#a886332e00d117d2395e39a28ac4a6963">queryFilesCount</a> (void)</td></tr>
+<tr class="separator:a886332e00d117d2395e39a28ac4a6963"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8eefa29624896b8b0dc54c2859fab3f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_d___y_x5300.html#ae8eefa29624896b8b0dc54c2859fab3f">queryFile</a> (void)</td></tr>
+<tr class="separator:ae8eefa29624896b8b0dc54c2859fab3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Core object for the <a class="el" href="class_m_d___y_x5300.html">MD_YX5300</a> library </p>
@@ -226,23 +233,27 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
 <p>Status code enumerated type specification.</p>
 <p>Used by the <a class="el" href="struct_m_d___y_x5300_1_1cb_data.html">cbData</a> status structure in the code field to identify the type of status data contained. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba7f971a1bfd34a8de1cc1815502e98ca8"></a>STS_OK&#160;</td><td class="fielddoc"><p>No error. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba7f971a1bfd34a8de1cc1815502e98ca8"></a>STS_OK&#160;</td><td class="fielddoc"><p>No error (library generated status) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512baaa3f4484197fc33f0eabf1e78a7baf1a"></a>STS_TIMEOUT&#160;</td><td class="fielddoc"><p>Timeout on response message. </p>
+<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512baaa3f4484197fc33f0eabf1e78a7baf1a"></a>STS_TIMEOUT&#160;</td><td class="fielddoc"><p>Timeout on response message (library generated status) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba63d42f065f496ca09cf216e73830d1db"></a>STS_TF_INSERT&#160;</td><td class="fielddoc"><p>TF Card was inserted. </p>
+<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba63d42f065f496ca09cf216e73830d1db"></a>STS_TF_INSERT&#160;</td><td class="fielddoc"><p>TF Card was inserted (unsolicited) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512baf8358b143c53d30e75de521b2cb4bcd8"></a>STS_TF_REMOVE&#160;</td><td class="fielddoc"><p>TF card was removed. </p>
+<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512baf8358b143c53d30e75de521b2cb4bcd8"></a>STS_TF_REMOVE&#160;</td><td class="fielddoc"><p>TF card was removed (unsolicited) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512bad62235fd6df325ef101749659b6af0fc"></a>STS_ERR&#160;</td><td class="fielddoc"><p>Generic error occurred. </p>
+<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba34905554d8be656d86fa14d854b72afc"></a>STS_FILE_END&#160;</td><td class="fielddoc"><p>Track/file has ended (unsolicited) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba5609be6c63ac8c590390b73c9926f21b"></a>STS_INIT&#160;</td><td class="fielddoc"><p>Initialisation complete (unsolicited) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba6f0d55b0646e3e4a6f655a5f9dc86177"></a>STS_ERR_FILE&#160;</td><td class="fielddoc"><p>Error file not found. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba9429c68210c18436582ddcad9f19ca4a"></a>STS_ACK_OK&#160;</td><td class="fielddoc"><p>Message acknowledged ok. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba34905554d8be656d86fa14d854b72afc"></a>STS_FILE_END&#160;</td><td class="fielddoc"><p>Track/file has ended. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512baca3823362d2959b0613584b91106d61a"></a>STS_STATUS&#160;</td><td class="fielddoc"><p>Current status. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512bac3f38519b25798d40533537e6cf3e4f5"></a>STS_VOLUME&#160;</td><td class="fielddoc"><p>Current volume level. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512baa5f2df087496f66cc31e95eb2c1a630f"></a>STS_EQUALIZER&#160;</td><td class="fielddoc"><p>Equalizer status. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba33d63619bb3341c6007a9b905ddfa645"></a>STS_TOT_FILES&#160;</td><td class="fielddoc"><p>TF Total file count. </p>
 </td></tr>
@@ -331,7 +342,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
       </table>
 </div><div class="memdoc">
 <p>Initialize the object.</p>
-<p>Initialize the object data. This needs to be called during setup() to initialize new data for the class that cannot be done during the object creation. </p>
+<p>Initialize the object data. This needs to be called during setup() to initialize new data for the class that cannot be done during the object creation.</p>
+<p>The MP3 device is reset and the TF card set as the input file system, with appropriate delays after each operation. </p>
 
 </div>
 </div>
@@ -375,11 +387,40 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
       </table>
 </div><div class="memdoc">
 <p>Set the readback device.</p>
-<p>Set the readback device to the specifed type. Currently the only type available is a TF device (CMD_OPT_TF). This is set during the class initialisation ans should not be required in application code.</p>
+<p>Set the readback device to the specifed type. Currently the only type available is a TF device (CMD_OPT_TF). The application should allow 200ms for the file system to be initiliased before further interacting with the MP3 device.</p>
+<p>The TF file system is set at <a class="el" href="class_m_d___y_x5300.html#a83ad6e9fe7a43d30db4c13e071659a85">begin()</a> and this method should not need to be called from application code.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">devId</td><td>the device id for the type of device. Currently only 0x02 (TF). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="aa206a022a1730267b7507de3cee01166"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa206a022a1730267b7507de3cee01166">&#9670;&nbsp;</a></span>equalizer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MD_YX5300::equalizer </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>eqId</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set equalizer mode.</p>
+<p>Set the equalizer mode to one of the preset types - 0:Normal, 1:Pop, 2:Rock, 3:Jazz, 4:Classic or 5:Base</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eqId</td><td>the eualizer type requested [1..5]. </td></tr>
   </table>
   </dd>
 </dl>
@@ -469,7 +510,35 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
       </table>
 </div><div class="memdoc">
 <p>Control repeat play mode (specific folder).</p>
-<p>Set or reset the repeat playing mode for the specified folder track.</p>
+<p>Set or reset the repeat playing mode for the specified folder. At the end of playing each file the device will send a STS_FILE_END message.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">folder</td><td>the folder number containing the files to repeat. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a4f915c5de0c9464a460eaa849c684125"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f915c5de0c9464a460eaa849c684125">&#9670;&nbsp;</a></span>playFolderShuffle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MD_YX5300::playFolderShuffle </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>folder</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Control shuffle play mode (specific folder).</p>
+<p>Set or reset the shuffle playing mode for the specified folder. At the end of playing each file the device will send a STS_FILE_END message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -497,7 +566,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
       </table>
 </div><div class="memdoc">
 <p>Play the next MP3 file.</p>
-<p>Play the next MP3 file in numeric order.</p>
+<p>Play the next MP3 file in numeric order. At the end of playing the file the device will send a STS_FILE_END message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
@@ -541,64 +610,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
       </table>
 </div><div class="memdoc">
 <p>Play the previous MP3 file.</p>
-<p>Play the previous MP3 file in numeric order.</p>
+<p>Play the previous MP3 file in numeric order. At the end of playing the file the device will send a STS_FILE_END message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
-
-</div>
-</div>
-<a id="a2d930bba1dc6f356d6cfa6b4edeca0ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d930bba1dc6f356d6cfa6b4edeca0ec">&#9670;&nbsp;</a></span>playRepeat()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool MD_YX5300::playRepeat </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>b</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Control repeat play mode (current file).</p>
-<p>Set or reset the repeat playing mode for the current track.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">b</td><td>true to enable mode, false to disable. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
-
-</div>
-</div>
-<a id="a96fd12ba21566f00c9e27cfe687a9f8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96fd12ba21566f00c9e27cfe687a9f8d">&#9670;&nbsp;</a></span>playShuffle()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool MD_YX5300::playShuffle </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>b</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Control shuffle playing mode.</p>
-<p>Set or reset the playing mode to/from random shuffle.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">b</td><td>true to enable mode, false to disable. </td></tr>
-  </table>
-  </dd>
-</dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
@@ -629,7 +642,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
       </table>
 </div><div class="memdoc">
 <p>Play a specific file in a folder.</p>
-<p>Play a file by specifying the folder and file to be played.</p>
+<p>Play a file by specifying the folder and file to be played. At the end of playing the file the device will send a STS_FILE_END message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -658,7 +671,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
       </table>
 </div><div class="memdoc">
 <p>Restart playing the current MP3 file.</p>
-<p>Restart playing playing the current MP3 file after a <a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a>.</p>
+<p>Restart playing playing the current MP3 file after a <a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a>. At the end of playing the file the device will send a STS_FILE_END message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a>, <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
@@ -702,11 +715,39 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
       </table>
 </div><div class="memdoc">
 <p>Play a specific file.</p>
-<p>Play a file by specifying the fiule index number.</p>
+<p>Play a file by specifying the fiule index number. At the end of playing the file the device will send a STS_FILE_END message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">t</td><td>the file indexd (0-255) to be played. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a3aac294a327f0a049614a878ae9a42dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3aac294a327f0a049614a878ae9a42dc">&#9670;&nbsp;</a></span>playTrackRepeat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MD_YX5300::playTrackRepeat </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Play repeat specific track.</p>
+<p>Play a track in repeat mode. At the end of playing the file the device will send a STS_FILE_END message.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>the file index. </td></tr>
   </table>
   </dd>
 </dl>
@@ -731,6 +772,62 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
 </div><div class="memdoc">
 <p>Query the current equalizer setting.</p>
 <p>Request the current equalizer setting from the device.</p>
+<ul>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation ">cbData.code</a> is STS_??.</li>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned ">cbData.data</a> is the equalizer setting.</li>
+</ul>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="ae8eefa29624896b8b0dc54c2859fab3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8eefa29624896b8b0dc54c2859fab3f">&#9670;&nbsp;</a></span>queryFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MD_YX5300::queryFile </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Query the file currently playing.</p>
+<p>Request the index of the file currently being played.</p>
+<ul>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation ">cbData.code</a> is STS_PLAYING.</li>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned ">cbData.data</a> is the index of the file currently playing.</li>
+</ul>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a886332e00d117d2395e39a28ac4a6963"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a886332e00d117d2395e39a28ac4a6963">&#9670;&nbsp;</a></span>queryFilesCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MD_YX5300::queryFilesCount </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Query the total number of files.</p>
+<p>Request the count of files on the TF device.</p>
+<ul>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation ">cbData.code</a> is STS_TOT_FILES.</li>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned ">cbData.data</a> is the count of the files on te file store.</li>
+</ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
@@ -753,19 +850,23 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
 </div><div class="memdoc">
 <p>Query the total number of folders.</p>
 <p>Request the count of folder on the TF device.</p>
+<ul>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation ">cbData.code</a> is STS_TOT_FLDR.</li>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned ">cbData.data</a> is the count of the folder on the file store, including the root folder.</li>
+</ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
 </div>
-<a id="af6a86736ed1c900018b3c25198c621d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af6a86736ed1c900018b3c25198c621d7">&#9670;&nbsp;</a></span>queryFolderTracks()</h2>
+<a id="ac33b2da1090c677f328359f56d4d1e9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac33b2da1090c677f328359f56d4d1e9b">&#9670;&nbsp;</a></span>queryFolderFiles()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool MD_YX5300::queryFolderTracks </td>
+          <td class="memname">bool MD_YX5300::queryFolderFiles </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>folder</em></td><td>)</td>
@@ -775,6 +876,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
 </div><div class="memdoc">
 <p>Query the number of files in the specified folder.</p>
 <p>Request the count of files in the specified folder number.</p>
+<ul>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation ">cbData.code</a> is STS_FLDR_FILES.</li>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned ">cbData.data</a> is the count of the files in the folder.</li>
+</ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -786,14 +891,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
 
 </div>
 </div>
-<a id="a3354d8054013157853481e5d50568fc8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3354d8054013157853481e5d50568fc8">&#9670;&nbsp;</a></span>queryTrack()</h2>
+<a id="a0023cf7faa718fa2d1df1b987f523246"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0023cf7faa718fa2d1df1b987f523246">&#9670;&nbsp;</a></span>queryStatus()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool MD_YX5300::queryTrack </td>
+          <td class="memname">bool MD_YX5300::queryStatus </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -801,31 +906,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Query the track currently playing.</p>
-<p>Request the index of the track currentlybeing played.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
-
-</div>
-</div>
-<a id="aab9540d3ccbe82913d49a7c2f5849479"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab9540d3ccbe82913d49a7c2f5849479">&#9670;&nbsp;</a></span>queryTracksCount()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool MD_YX5300::queryTracksCount </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Query the total number of tracks.</p>
-<p>Request the count of tracks on the TF device.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
+<p>Query the current status.</p>
+<p>Request the current status setting from the device.</p>
+<ul>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation ">cbData.code</a> is STS_STATUS.</li>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned ">cbData.data</a> high byte is the active file store active (0x02 for TF); low byte 0x00=stopped, 0x01=play, 0x02=paused.</li>
+</ul>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a457552976582293dfe58b2b76ea31999">volumeQuery()</a>, <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
@@ -847,7 +934,39 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
 </div><div class="memdoc">
 <p>Query the current volume setting.</p>
 <p>Request the current volume setting from the device. This is a wrapper alternative for <a class="el" href="class_m_d___y_x5300.html#a457552976582293dfe58b2b76ea31999">volumeQuery()</a>.</p>
+<ul>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation ">cbData.code</a> is STS_VOLUME.</li>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned ">cbData.data</a> is the volume setting.</li>
+</ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a457552976582293dfe58b2b76ea31999">volumeQuery()</a>, <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="af67dbf80a1e685053375a58917192e61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af67dbf80a1e685053375a58917192e61">&#9670;&nbsp;</a></span>repeat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MD_YX5300::repeat </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>b</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Control repeat play mode (current file).</p>
+<p>Set or reset the repeat playing mode for the currently playing track. At the end of each repeat play the device will send a STS_FILE_END message.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">b</td><td>true to enable mode, false to disable. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
@@ -868,7 +987,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
       </table>
 </div><div class="memdoc">
 <p>Reset the MP3 player.</p>
-<p>Put the MP3 player into reste mode. The payer will return to its power up state.</p>
+<p>Put the MP3 player into reste mode. The payer will return to its power up state. The application should allow 500ms between the rest command and any subsequent interaction with the device.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
@@ -956,6 +1075,34 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>No return value. </dd></dl>
+
+</div>
+</div>
+<a id="af7c8011ae2633a85be3a4f533e3ba765"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7c8011ae2633a85be3a4f533e3ba765">&#9670;&nbsp;</a></span>shuffle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MD_YX5300::shuffle </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>b</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Control shuffle playing mode.</p>
+<p>Set or reset the playing mode to/from random shuffle. At the end of playing each file the device will send a STS_FILE_END message.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">b</td><td>true to enable mode, false to disable. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
 </div>
@@ -1135,7 +1282,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>queryStatus</b> (void
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_m_d___y_x5300.html">MD_YX5300</a></li>
-    <li class="footer">Generated on Sun Jul 15 2018 16:51:27 for MD_YX5300 Library by
+    <li class="footer">Generated on Wed Jul 18 2018 17:25:33 for MD_YX5300 Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

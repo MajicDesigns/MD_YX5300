@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MD_YX5300 Library: Arduino LED Matrix Panel Library</title>
+<title>MD_YX5300 Library: Arduino Serial MP3 Player</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -89,27 +89,54 @@ $(document).ready(function(){initNavTree('index.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">Arduino LED Matrix Panel Library </div>  </div>
+<div class="title">Arduino Serial MP3 Player </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h2>The <a class="el" href="class_m_d___y_x5300.html">MD_YX5300</a> Library </h2>
-<p>This library implements functions that allows cascaded MAX72xx LED modules (64 individual LEDs)to be used for LED matrix panels, allowing the programmer to use the LED matrix as an pixel addressable display device, as shown in the photo below.</p>
+<p>This library implements functions to control RS232 Serial MP3 players based on the YX5300 IC. These are often sold as "Catalex" Serial MP3 players and look like the device in the photo below. This library manages the serial interface and request/response sequences, simplifying running the device as a background task.</p>
 <div class="image">
-<img src="MAXPanel_Display.jpg" alt="MD_MAXPanel Display Panel" title="MD_MAXPanel Display Panel"/>
-</div>
+<img src="YX5300_Serial_MP3_Player.jpg" alt="YX5300_Serial_MP3_Player.jpg"/>
+<div class="caption">
+YX5300 Serial MP3 Player</div></div>
+<p> The YX5300 supports 8k Hz ~ 48k Hz sampling frequency MP3 and WAV file formats. The audio files are stored on a micro SD card that plugs into a TF card socket on the back of the board. The MCU controls the MP3 playback by sending serial commands to the module via the UART port.</p>
+<h2>Module Interfaces </h2>
+<div class="image">
+<img src="YX5300_Catalex_Layout.png" alt="YX5300_Catalex_Layout.png"/>
+<div class="caption">
+YX5300 Catalex Layout</div></div>
+<ul>
+<li><b>Control interface</b> is a UART TTL interface (GND, VCC, TX, RX). PIns are connected GND to MCU ground, VCC to 5V power supply, YX5300 TX (transmit) to the designated RX (receive) pin for the SoftwareSerial library, YX5300 RX to SoftwareSerial TX.</li>
+<li><b>TF card socket</b> on the reverse side of the PCB for plugging in the micro SD card with MP3/WAV files.</li>
+<li><b>Playback indicator</b> (green LED) blinks dusing playback, steady otherwise.</li>
+<li><b>Headphone jack</b> for sound output to headphones or external amplifier.</li>
+</ul>
+<h2>MP3/WAV File </h2>
+<p>The micro SD card should be formatted as FAT16 or FAT32.</p>
+<p>Songs must be prefixed with a unique 3 digit index number. For example 001xxx.mp3, 002xxx.mp3, 003xxx.mp3 (where xxx is an arbitrary optional name). Songs may also be arranged in folders named '01', '02', '03', etc. Even if you plan only one playlist, it is better to keep them in a '01' folder.</p>
+<p>An example of the folder and files on the micro SD card might look like:</p>
+<div class="fragment"><div class="line">+-+- 01</div><div class="line">  |   + 001-Happy_Dance.mp3</div><div class="line">  |   + 002-O_Sole_Mio.mp3</div><div class="line">  |</div><div class="line">  +- 02</div><div class="line">  |   + 003-Humpty_Dumpty.mp3</div><div class="line">  |   + 004-Incy_Wincy_Spider.mp3</div><div class="line">  |   + 005-Grand_Duke.mp3</div><div class="line">  | </div><div class="line">  +- 03</div><div class="line">      + 006-Fernando.mp3</div><div class="line">      + 007-Mamma_Mia.mp3</div></div><!-- fragment --><h2>Library Dependencies </h2>
+<p>The library used the <em>SoftwareSerial</em> library to manage the serial interface to the MP3 player.</p>
 <h2>Topics </h2>
 <ul>
-<li><a class="el" href="page_software.html">Software Library</a></li>
+<li><a class="el" href="page_software.html">Managing Communications</a></li>
 <li><a class="el" href="page_revision_history.html">Revision History</a></li>
 <li><a class="el" href="page_copyright.html">Copyright</a></li>
-<li><a class="el" href="page_donation.html">Support the Library</a> </li>
+<li><a class="el" href="page_donation.html">Support the Library</a></li>
+<li><a class="el" href="page_other_links.html">Other Useful Links</a></li>
+</ul>
+<h2>Known Issues </h2>
+<ul>
+<li>equalizer() command is accepted but not actioned by device. Documentation seems to indicate that this function may be disabled in the hardware (Chinese transaltion is ambiguous).</li>
+<li>playFolderFile() command always returns ERR_FILE with valid parameters.</li>
+<li>playFolderShuffle() command is accepted but not actioned by the device.</li>
+<li>shuffle() command is accepted but not seem to shuffle files playback. </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Jul 15 2018 16:51:27 for MD_YX5300 Library by
+    <li class="footer">Generated on Wed Jul 18 2018 17:25:33 for MD_YX5300 Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

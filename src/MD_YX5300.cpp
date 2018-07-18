@@ -46,7 +46,9 @@ void MD_YX5300::begin(void)
 {
   _S.begin(9600);
   reset();
+  delay(500);   // wait for the rest to occur
   device(CMD_OPT_DEV_TF);
+  delay(200);   // wait for the file system to be initialised
 }
 
 bool MD_YX5300::check(void)
@@ -69,15 +71,19 @@ bool MD_YX5300::check(void)
   do
   {
     c = _S.read();
-    if (c == PKT_SOM) _bufIdx = 0;
+ 
+    if (c == PKT_SOM) _bufIdx = 0;      // start of messge - reset the index
+    
     _bufRx[_bufIdx++] = c;
+
+    if (_bufIdx >= ARRAY_SIZE(_bufRx))  // keep index within array memory bounds
+      _bufIdx = ARRAY_SIZE(_bufRx) - 1;
   } while (_S.available() && c != PKT_EOM);
 
   // check if we have a whole message to 
   // process and do something with it here!
   if (c == PKT_EOM)
   {
-    _waitResponse = false;
     processResponse();
   }
 
@@ -119,6 +125,7 @@ void MD_YX5300::processResponse(bool bTimeout = false)
 #if LIBDEBUG
   dumpMessage(_bufRx, _bufIdx, "R");
 #endif
+  _waitResponse = false;    // definituely no longer waiting
 
   // set the status memory up with current return codes
   _status.code = (bTimeout ? STS_TIMEOUT : _bufRx[3]);
@@ -130,20 +137,22 @@ void MD_YX5300::processResponse(bool bTimeout = false)
   // allocate the return code & print debug message
   switch (_status.code)
   {
-  case STS_OK:        PRINTS("OK");          break;
-  case STS_TIMEOUT:   PRINTS("Timeout");     break;
-  case STS_TF_INSERT: PRINTS("TF inserted"); break;
-  case STS_TF_REMOVE: PRINTS("TF removed");  break;
-  case STS_ERR:       PRINTS("Error");       break;
-  case STS_ACK_OK:    PRINTS("Ack OK");      break;
-  case STS_FILE_END:   _status.data = _bufRx[6]; PRINT("Ended track ", _status.data);    break;
+  case STS_OK:         PRINTS("OK");          break;
+  case STS_TIMEOUT:    PRINTS("Timeout");     break;
+  case STS_TF_INSERT:  PRINTS("TF inserted"); break;
+  case STS_TF_REMOVE:  PRINTS("TF removed");  break;
+  case STS_ACK_OK:     PRINTS("Ack OK");      break;
+  case STS_ERR_FILE:   _status.data = _bufRx[6]; PRINT("File Error ", _status.data);   break;
+  case STS_INIT:       _status.data = _bufRx[6]; PRINTX("Init 0x", _status.data);      break;
+  case STS_FILE_END:   _status.data = _bufRx[6]; PRINT("Ended track ", _status.data);  break;
   case STS_STATUS:     _status.data = (_bufRx[5] << 8) | _bufRx[6]; PRINTX("Status 0x", _status.data);      break;
-  case STS_VOLUME:     _status.data = _bufRx[6]; PRINT("Vol ", _status.data);            break;
+  case STS_EQUALIZER:  _status.data = _bufRx[6]; PRINT("Equalizer ", _status.data);    break;
+  case STS_VOLUME:     _status.data = _bufRx[6]; PRINT("Vol ", _status.data);          break;
   case STS_TOT_FILES:  _status.data = _bufRx[6]; PRINT("Tot files ", _status.data);    break;
-  case STS_PLAYING:    _status.data = _bufRx[6]; PRINT("Playing File ", _status.data);      break;
+  case STS_PLAYING:    _status.data = _bufRx[6]; PRINT("Playing File ", _status.data); break;
   case STS_FLDR_FILES: _status.data = _bufRx[6]; PRINT("Folder files ", _status.data); break;
-  case STS_TOT_FLDR:   _status.data = _bufRx[6]; PRINT("Tot folder: ", _status.data);      break;
-  default:             _status.data = _bufRx[6]; PRINTS("Unknown Status Code");          break;
+  case STS_TOT_FLDR:   _status.data = _bufRx[6]; PRINT("Tot folder: ", _status.data);  break;
+  default:             _status.data = _bufRx[6]; PRINTS("Unknown Status Code");        break;
   }
 
   // finally, call the callback if there is one

@@ -1,25 +1,13 @@
 # ArduinoSerialMP3Player
-Playing MP3 files on a Serial MP3 Player board from Catalex (YX5300 chip)
 
-Buy the MP3 module on http://www.dx.com/p/uart-control-serial-mp3-music-player-module-for-arduino-avr-arm-pic-blue-silver-342439#.VfHyobPh5z0
+This library implements functions to control RS232 Serial MP3 players based 
+on the YX5300 IC. These are often sold as "Catalex" Serial MP3 players.
 
+The YX5300 supports 8k Hz ~ 48k Hz sampling frequency MP3 and WAV file formats. The audio files
+are stored on micro SD cards that plug into a TF card socket on the back of the board. The MCU
+controls the MP3 playback by sending serial commands to the module via UART port. This library 
+manages the serial interface and request/response sequences.
 
-Documentation and some Arduino code examples:
+If you like and use this library please consider making a small donation using [PayPal](https://paypal.me/MajicDesigns/4USD)
 
-(Spanish)
-http://joanruedapauweb.com/blog/index.php/2017/02/07/arduino-serial-mp3-player-yx5300-es/
-
-(Chinese)(Catalex_YX5300_Docs.zip files)
-http://pan.baidu.com/s/1hqilpB2
-
-(English)
-http://www.da-share.com/misc/catalex-mp3-board-yx5300-chip/
-
-(French)
-https://andrologiciels.wordpress.com/arduino/son-et-arduino/mp3/catalex-mp3-serie/
-
-(Polish)
-http://www.jarzebski.pl/arduino/komponenty/modul-mp3-z-ukladem-yx5300.html
-
-(French)
-https://www.carnetdumaker.net/articles/utiliser-un-lecteur-serie-de-fichiers-mp3-avec-une-carte-arduino-genuino/
+[Library Documentation](https://MajicDesigns.github.io/MD_YX5300/)

@@ -111,7 +111,32 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Status return structure specification.</p>
-<p>Used to return (through callback or <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a> method) the status value of the last device request. </p>
+<p>Used to return (through callback or <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a> method) the status value of the last device request.</p>
+<p>Device commands will always receive a STS_ACK_OK if the message was received correctly. Some commands, notably query requests, will also include a response with status or information data. These methods are listed below:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft">Method  </th><th class="markdownTableHeadLeft">Return Status (code)  </th><th class="markdownTableHeadLeft">Return Data (data)   </th></tr>
+<tr class="markdownTableBody" class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">Unsolicited mesg  </td><td class="markdownTableBodyLeft">STS_FILE_END  </td><td class="markdownTableBodyLeft">Index number of the file just completed.   </td></tr>
+<tr class="markdownTableBody" class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">Unsolicited mesg  </td><td class="markdownTableBodyLeft">STS_INIT  </td><td class="markdownTableBodyLeft">Device initialisation complete - file store types available (0x02 for TF).   </td></tr>
+<tr class="markdownTableBody" class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">Unsolicited mesg  </td><td class="markdownTableBodyLeft">STS_ERR_FILE  </td><td class="markdownTableBodyLeft">File index   </td></tr>
+<tr class="markdownTableBody" class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><a class="el" href="class_m_d___y_x5300.html#a0023cf7faa718fa2d1df1b987f523246">queryStatus()</a>  </td><td class="markdownTableBodyLeft">STS_STATUS  </td><td class="markdownTableBodyLeft">Current status. High byte is file store (0x02 for TF); low byte 0x00=stopped, 0x01=play, 0x02=paused.   </td></tr>
+<tr class="markdownTableBody" class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><a class="el" href="class_m_d___y_x5300.html#a9661a453395b9932cf6273ce266aabc5">queryVolume()</a>  </td><td class="markdownTableBodyLeft">STS_VOLUME  </td><td class="markdownTableBodyLeft">Current volume level [0..MAX_VOLUME].   </td></tr>
+<tr class="markdownTableBody" class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><a class="el" href="class_m_d___y_x5300.html#a886332e00d117d2395e39a28ac4a6963">queryFilesCount()</a>  </td><td class="markdownTableBodyLeft">STS_TOT_FILES  </td><td class="markdownTableBodyLeft">Total number of files on the TF card.   </td></tr>
+<tr class="markdownTableBody" class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><a class="el" href="class_m_d___y_x5300.html#ae8eefa29624896b8b0dc54c2859fab3f">queryFile()</a>  </td><td class="markdownTableBodyLeft">STS_PLAYING  </td><td class="markdownTableBodyLeft">Index number of the current file playing.   </td></tr>
+<tr class="markdownTableBody" class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><a class="el" href="class_m_d___y_x5300.html#ac33b2da1090c677f328359f56d4d1e9b">queryFolderFiles()</a>  </td><td class="markdownTableBodyLeft">STS_FLDR_FILES  </td><td class="markdownTableBodyLeft">Total number of files in the folder.   </td></tr>
+<tr class="markdownTableBody" class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><a class="el" href="class_m_d___y_x5300.html#adc347ca613ecd302360ba8abdd6c72a2">queryFolderCount()</a>  </td><td class="markdownTableBodyLeft">STS_TOT_FLDR  </td><td class="markdownTableBodyLeft">Total number of folders on the TF card.   </td></tr>
+<tr class="markdownTableBody" class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><a class="el" href="class_m_d___y_x5300.html#acdf43733be6cffa357c3e19131f95de9">queryEqualizer()</a>  </td><td class="markdownTableBodyLeft">STS_EQUALIZER  </td><td class="markdownTableBodyLeft">Current equalizer mode [0..5].   </td></tr>
+</table>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/<a class="el" href="_m_d___y_x5300_8h.html">MD_YX5300.h</a></li>
 </ul>
@@ -121,7 +146,7 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_m_d___y_x5300.html">MD_YX5300</a></li><li class="navelem"><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html">cbData</a></li>
-    <li class="footer">Generated on Sun Jul 15 2018 16:51:27 for MD_YX5300 Library by
+    <li class="footer">Generated on Wed Jul 18 2018 17:25:33 for MD_YX5300 Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>
