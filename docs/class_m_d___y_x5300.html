@@ -243,7 +243,7 @@ Public Member Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba34905554d8be656d86fa14d854b72afc"></a>STS_FILE_END&#160;</td><td class="fielddoc"><p>Track/file has ended (unsolicited) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba5609be6c63ac8c590390b73c9926f21b"></a>STS_INIT&#160;</td><td class="fielddoc"><p>Initialisation complete (unsolicited) </p>
+<tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba5609be6c63ac8c590390b73c9926f21b"></a>STS_INIT&#160;</td><td class="fielddoc"><p>Initialization complete (unsolicited) </p>
 </td></tr>
 <tr><td class="fieldname"><a id="aea3c10a359e2e1e317685f969533512ba6f0d55b0646e3e4a6f655a5f9dc86177"></a>STS_ERR_FILE&#160;</td><td class="fielddoc"><p>Error file not found. </p>
 </td></tr>
@@ -295,6 +295,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Class Constructor.</p>
 <p>Instantiate a new instance of the class. The parameters passed are used to connect the software to the hardware.</p>
+<p>Parameters are required for SoftwareSerial initialization. If native serial port is used then dummy parameters need to be supplied.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pinRx</td><td>The pin for receiving serial data, connected to the device Tx pin. </td></tr>
@@ -363,7 +364,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Receive and process serial messages.</p>
-<p>The check function should be called repeatedly in loop() to allow the library to receive and process device messages. The MP3 device can send messages as a reponse to a request or unsolicited to inform of state changes, such a track play completing. A true value returned indicates that a message has been received and the status is ready to be processed.</p>
+<p>The check function should be called repeatedly in loop() to allow the library to receive and process device messages. The MP3 device can send messages as a response to a request or unsolicited to inform of state changes, such a track play completing. A true value returned indicates that a message has been received and the status is ready to be processed.</p>
 <p>With callbacks disabled, the application should use <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a> to retrieve and process this status. With callbacks enabled, the <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> will cause the callback to be processed before returning to the application.</p>
 <p>If synchronous mode is enabled only unsolicited messages will be processed through the call to <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, as the other messages will have been processed synchronously as part of the request.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html">cbData</a>, <a class="el" href="class_m_d___y_x5300.html#a0ce8f343cad80b4e2da80e1e0c75f378">setCallback()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a></dd></dl>
@@ -386,8 +387,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the readback device.</p>
-<p>Set the readback device to the specifed type. Currently the only type available is a TF device (CMD_OPT_TF). The application should allow 200ms for the file system to be initiliased before further interacting with the MP3 device.</p>
+<p>Set the file store device.</p>
+<p>Set the file store device to the specified type. Currently the only type available is a TF device (CMD_OPT_TF). The application should allow 200ms for the file system to be initialized before further interacting with the MP3 device.</p>
 <p>The TF file system is set at <a class="el" href="class_m_d___y_x5300.html#a83ad6e9fe7a43d30db4c13e071659a85">begin()</a> and this method should not need to be called from application code.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -420,7 +421,7 @@ Public Member Functions</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">eqId</td><td>the eualizer type requested [1..5]. </td></tr>
+    <tr><td class="paramname">eqId</td><td>the equalizer type requested [1..5]. </td></tr>
   </table>
   </dd>
 </dl>
@@ -693,7 +694,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Stop playing the current MP3 file.</p>
-<p>Stop playing the currenbt MP3 file and cancel the current playing mode. <a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a> should be used for a temporary playing stop.</p>
+<p>Stop playing the current MP3 file and cancel the current playing mode. <a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a> should be used for a temporary playing stop.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a>, <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
@@ -715,11 +716,11 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Play a specific file.</p>
-<p>Play a file by specifying the fiule index number. At the end of playing the file the device will send a STS_FILE_END message.</p>
+<p>Play a file by specifying the file index number. At the end of playing the file the device will send a STS_FILE_END message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">t</td><td>the file indexd (0-255) to be played. </td></tr>
+    <tr><td class="paramname">t</td><td>the file indexed (0-255) to be played. </td></tr>
   </table>
   </dd>
 </dl>
@@ -826,7 +827,7 @@ Public Member Functions</h2></td></tr>
 <p>Request the count of files on the TF device.</p>
 <ul>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation ">cbData.code</a> is STS_TOT_FILES.</li>
-<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned ">cbData.data</a> is the count of the files on te file store.</li>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned ">cbData.data</a> is the count of the files on the file store.</li>
 </ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
@@ -987,7 +988,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Reset the MP3 player.</p>
-<p>Put the MP3 player into reste mode. The payer will return to its power up state. The application should allow 500ms between the rest command and any subsequent interaction with the device.</p>
+<p>Put the MP3 player into reset mode. The payer will return to its power up state. The application should allow 500ms between the rest command and any subsequent interaction with the device.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
@@ -1067,7 +1068,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Set serial response timeout.</p>
-<p>Set the device reponse timeout in milliseconds. If a message is not received within this time a timeout error status will be generated. The default timeout is 200 milliseconds.</p>
+<p>Set the device response timeout in milliseconds. If a message is not received within this time a timeout error status will be generated. The default timeout is 200 milliseconds.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">t</td><td>timeout in milliseconds </td></tr>
@@ -1216,7 +1217,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Mute the sound output.</p>
-<p>Mute the sound output by supressing the output from the DAC. The MP3 file will continue playing but will not be heard. To temporarily halt the playing use <a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a>.</p>
+<p>Mute the sound output by suppressing the output from the DAC. The MP3 file will continue playing but will not be heard. To temporarily halt the playing use <a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a>.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a>, <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1266,7 +1267,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Set awake mode.</p>
-<p>Wakes up the MP3 player from sleep mode. Use <a class="el" href="class_m_d___y_x5300.html#a79c7629e0cd075e00a881e7bfc7d9bf5">sleep()</a> to enablke sleep mode.</p>
+<p>Wakes up the MP3 player from sleep mode. Use <a class="el" href="class_m_d___y_x5300.html#a79c7629e0cd075e00a881e7bfc7d9bf5">sleep()</a> to enable sleep mode.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a79c7629e0cd075e00a881e7bfc7d9bf5">sleep()</a>, <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
@@ -1282,7 +1283,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_m_d___y_x5300.html">MD_YX5300</a></li>
-    <li class="footer">Generated on Wed Jul 18 2018 17:25:33 for MD_YX5300 Library by
+    <li class="footer">Generated on Thu Jul 19 2018 17:14:38 for MD_YX5300 Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

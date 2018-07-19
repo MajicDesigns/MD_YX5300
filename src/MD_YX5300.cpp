@@ -1,5 +1,5 @@
 /*
-MD_YX5300 - Library for YX5300 MP3 IC using serial interface
+MD_YX5300 - Library for YX5300 Serial MP3 module
 
 See header file for comments
 
@@ -48,7 +48,7 @@ void MD_YX5300::begin(void)
   reset();
   delay(500);   // wait for the rest to occur
   device(CMD_OPT_DEV_TF);
-  delay(200);   // wait for the file system to be initialised
+  delay(200);   // wait for the file system to be initialized
 }
 
 bool MD_YX5300::check(void)
@@ -72,7 +72,7 @@ bool MD_YX5300::check(void)
   {
     c = _S.read();
  
-    if (c == PKT_SOM) _bufIdx = 0;      // start of messge - reset the index
+    if (c == PKT_SOM) _bufIdx = 0;      // start of message - reset the index
     
     _bufRx[_bufIdx++] = c;
 

@@ -112,13 +112,13 @@ YX5300 Catalex Layout</div></div>
 </ul>
 <h2>MP3/WAV File </h2>
 <p>The micro SD card should be formatted as FAT16 or FAT32.</p>
-<p>Songs must be prefixed with a unique 3 digit index number. For example 001xxx.mp3, 002xxx.mp3, 003xxx.mp3 (where xxx is an arbitrary optional name). Songs may also be arranged in folders named '01', '02', '03', etc. Even if you plan only one playlist, it is better to keep them in a '01' folder.</p>
+<p>Songs must be prefixed with a unique 3 digit index number. For example 001xxx.mp3, 002xxx.mp3, 003xxx.mp3 (where xxx is an arbitrary optional name). Songs may also be arranged in folders named '01', '02', '03', etc. Even if you plan only one play list, it is better to keep them in a '01' folder.</p>
 <p>An example of the folder and files on the micro SD card might look like:</p>
 <div class="fragment"><div class="line">+-+- 01</div><div class="line">  |   + 001-Happy_Dance.mp3</div><div class="line">  |   + 002-O_Sole_Mio.mp3</div><div class="line">  |</div><div class="line">  +- 02</div><div class="line">  |   + 003-Humpty_Dumpty.mp3</div><div class="line">  |   + 004-Incy_Wincy_Spider.mp3</div><div class="line">  |   + 005-Grand_Duke.mp3</div><div class="line">  | </div><div class="line">  +- 03</div><div class="line">      + 006-Fernando.mp3</div><div class="line">      + 007-Mamma_Mia.mp3</div></div><!-- fragment --><h2>Library Dependencies </h2>
-<p>The library used the <em>SoftwareSerial</em> library to manage the serial interface to the MP3 player.</p>
+<p>The library used the <em>SoftwareSerial</em> library to manage the serial interface to the MP3 player. If more than one hardware Serial port is available this may be used but requires changing the alternative code switched by the C++ macro define USE_SOFTWARESERIAL at the top of the library header file.</p>
 <h2>Topics </h2>
 <ul>
-<li><a class="el" href="page_software.html">Managing Communications</a></li>
+<li><a class="el" href="page_software.html">Message Flow Management</a></li>
 <li><a class="el" href="page_revision_history.html">Revision History</a></li>
 <li><a class="el" href="page_copyright.html">Copyright</a></li>
 <li><a class="el" href="page_donation.html">Support the Library</a></li>
@@ -126,7 +126,7 @@ YX5300 Catalex Layout</div></div>
 </ul>
 <h2>Known Issues </h2>
 <ul>
-<li>equalizer() command is accepted but not actioned by device. Documentation seems to indicate that this function may be disabled in the hardware (Chinese transaltion is ambiguous).</li>
+<li>equalizer() command is accepted but not actioned by device. Documentation seems to indicate that this function may be disabled in the hardware (Chinese translation is ambiguous).</li>
 <li>playFolderFile() command always returns ERR_FILE with valid parameters.</li>
 <li>playFolderShuffle() command is accepted but not actioned by the device.</li>
 <li>shuffle() command is accepted but not seem to shuffle files playback. </li>
@@ -136,7 +136,7 @@ YX5300 Catalex Layout</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jul 18 2018 17:25:33 for MD_YX5300 Library by
+    <li class="footer">Generated on Thu Jul 19 2018 17:14:38 for MD_YX5300 Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

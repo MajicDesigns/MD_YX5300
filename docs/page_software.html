@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MD_YX5300 Library: Managing Communications</title>
+<title>MD_YX5300 Library: Message Flow Management</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('page_software.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">Managing Communications </div>  </div>
+<div class="title">Message Flow Management </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><div class="image">
@@ -125,35 +125,37 @@ YX5300 Board Layout</div></div>
 <tr class="markdownTableBody" class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">End  </td><td class="markdownTableBodyRight">0xef  </td><td class="markdownTableBodyLeft">The end of each packet.   </td></tr>
 </table>
+<p>The message flow between the device and MCU is be displayed on the Serial Monitor by the library when the C++ macro define LIBDEBUG is set to 1 in the main code file.</p>
 <h2>Sending and Receiving Serial Messages </h2>
-<p>This library manages the serial interface to the TX5300 by taking care of sending and receiving the serial messages. This can be done in 2 modes, selectable at run time:</p><ul>
-<li><b>Synchronous</b>: The command message is sent and the code waits for the response before returning to the calling application. This is relatively inefficient of CPU time as it involves a busy wait, but is easy to implement in the application and is good for simple applications</li>
-<li><b>Asynchronous</b>: The command message is sent and the library immediately returns. The response message is processed as it returns and the calling application can continue to run while this happens. Once the response is received, the calling can be notified through a callback or pollined status (see below).</li>
-</ul>
-<p>Independently of the synch/asynch mode, the application can choose to be informed received messages are ready to process either by</p><ul>
-<li><b>Polling</b>: The return status of the check() method is used as the signal that an unsolicted message has been received. In synchronous mode the return code for the method invoked will be the status of check() for that request.</li>
-<li><b>Callback</b>: If a callback function is defined (see setCallback()), every unsolicited message received will be processed through the callback mechanism. In Synchronous mode, both the callback and the return code for the method invoked will signal receipt ofthe same message, so the application code should guard against processing the message twice.</li>
-</ul>
-<p>The interaction between Callback/Polled and Synch/Asynch is summarised in the table below.</p>
+<p>This library manages the serial interface to the TX5300 by taking care of sending and receiving the serial messages. The MP3 Player responds to command requests but it also sends unsolicited messages when certain events occur (eg, TF card removed or inserted). These unsolicited messages may be important to the application so the library implements mechanisms that allow the application to process the relevant notification data by placing it in a cbData structure.</p>
+<p>How the cbData structure is received by the application is flexible and depends on the setSynchronous() setting and whether a callback is defined. This is summarized in the table below and explained in the text that follows.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadRight"></th><th class="markdownTableHeadLeft">Callback  </th><th class="markdownTableHeadLeft">Polled   </th></tr>
 <tr class="markdownTableBody" class="markdownTableRowOdd">
-<td class="markdownTableBodyRight" rowspan="2">Synch  </td><td class="markdownTableBodyLeft"><em>unsol</em>: cback  </td><td class="markdownTableBodyLeft"><em>unsol</em>: check()   </td></tr>
+<td class="markdownTableBodyRight" rowspan="2">Sync  </td><td class="markdownTableBodyLeft"><em>unsol</em>: callback  </td><td class="markdownTableBodyLeft"><em>unsol</em>: check()   </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowEven">
 <td class="markdownTableBodyLeft"><em>resp</em>: ret status  </td><td class="markdownTableBodyLeft"><em>resp</em>: ret status   </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowOdd">
-<td class="markdownTableBodyRight" rowspan="2">Asynch  </td><td class="markdownTableBodyLeft"><em>unsol</em>: cback  </td><td class="markdownTableBodyLeft"><em>unsol</em>: check()   </td></tr>
+<td class="markdownTableBodyRight" rowspan="2">Async  </td><td class="markdownTableBodyLeft"><em>unsol</em>: callback  </td><td class="markdownTableBodyLeft"><em>unsol</em>: check()   </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowEven">
-<td class="markdownTableBodyLeft"><em>resp</em>: cback  </td><td class="markdownTableBodyLeft"><em>resp</em>: check()   </td></tr>
+<td class="markdownTableBodyLeft"><em>resp</em>: callback  </td><td class="markdownTableBodyLeft"><em>resp</em>: check()   </td></tr>
 </table>
+<p>The first choice is whether to process the message in line with the calling sequence (synchronous) or separately (asynchronously):</p><ul>
+<li><b>Synchronous</b>: The command message is sent and the code waits for the response before returning to the calling application. This is relatively inefficient of CPU time as it involves a busy wait, but is easy to implement in the application and is good for simple applications</li>
+<li><b>Asynchronous</b>: The command message is sent and the library immediately returns. The response message is processed as it returns and the calling application can continue to run while this happens. Once the response is received, the calling can be notified through a callback or polled status (see below).</li>
+</ul>
+<p>Independently of the sync/async mode, the application can choose to be informed received messages are ready to process either by:</p><ul>
+<li><b>Polling</b>: The return status of the check() method is used as the signal that an unsolicited message has been received. In synchronous mode the return code for the method invoked will be the status of check() for that request.</li>
+<li><b>Callback</b>: If a callback function is defined (see setCallback()), every unsolicited message received will be processed through the callback mechanism. In Synchronous mode, both the callback and the return code for the method invoked will signal receipt of the same message, so the application code should guard against processing the message twice. </li>
+</ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="index.html">Arduino Serial MP3 Player</a></li>
-    <li class="footer">Generated on Wed Jul 18 2018 17:25:33 for MD_YX5300 Library by
+    <li class="footer">Generated on Thu Jul 19 2018 17:14:38 for MD_YX5300 Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

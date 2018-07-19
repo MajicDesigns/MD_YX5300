@@ -1,8 +1,15 @@
 #ifndef MD_YX5300_H
 #define MD_YX5300_H
 
+
+#define USE_SOFTWARESERIAL  1   ///< Set to 1 to use SoftwareSerial library, 0 for native serial port
+
 #include <Arduino.h>
+#if USE_SOFTWARESERIAL
 #include <SoftwareSerial.h>
+#else
+#define _S Serial2      ///< Native serial port - can be changed to suit
+#endif
 
 /**
 * \file
@@ -44,7 +51,7 @@ The micro SD card should be formatted as FAT16 or FAT32.
 Songs must be prefixed with a unique 3 digit index number. For example
 001xxx.mp3, 002xxx.mp3, 003xxx.mp3 (where xxx is an arbitrary optional
 name). Songs may also be arranged in folders named '01', '02', '03', 
-etc. Even if you plan only one playlist, it is better to keep them in 
+etc. Even if you plan only one play list, it is better to keep them in 
 a '01' folder.
 
 An example of the folder and files on the micro SD card might look like:
@@ -67,7 +74,9 @@ An example of the folder and files on the micro SD card might look like:
 Library Dependencies
 --------------------
 The library used the _SoftwareSerial_ library to manage the serial interface to the
-MP3 player.
+MP3 player. If more than one hardware Serial port is available this may be used but 
+requires changing the alternative code switched by the C++ macro define 
+USE_SOFTWARESERIAL at the top of the library header file.
 
 Topics
 ------
@@ -80,7 +89,7 @@ Topics
 Known Issues
 ------------
 - equalizer() command is accepted but not actioned by device. Documentation seems to indicate that
-this function may be disabled in the hardware (Chinese transaltion is ambiguous).
+this function may be disabled in the hardware (Chinese translation is ambiguous).
 - playFolderFile() command always returns ERR_FILE with valid parameters.
 - playFolderShuffle() command is accepted but not actioned by the device.
 - shuffle() command is accepted but not seem to shuffle files playback.
@@ -89,10 +98,89 @@ this function may be disabled in the hardware (Chinese transaltion is ambiguous)
 If you like and use this library please consider making a small donation using [PayPal](https://paypal.me/MajicDesigns/4USD)
 
 \page pageOtherLinks Other Useful Links
+The Catalex documentation for their modules:
 - Catalex_YX5300_Docs.zip files (Chinese) http://pan.baidu.com/s/1hqilpB2
+
+This library also integrates data and ideas from a number of other places:
 - (French) https://andrologiciels.wordpress.com/arduino/son-et-arduino/mp3/catalex-mp3-serie/
 - (Polish) http://www.jarzebski.pl/arduino/komponenty/modul-mp3-z-ukladem-yx5300.html
 - (French) https://www.carnetdumaker.net/articles/utiliser-un-lecteur-serie-de-fichiers-mp3-avec-une-carte-arduino-genuino/
+
+\page pageSoftware Message Flow Management
+
+![YX5300 Board Layout] (YX5300_Board_Layout.jpg "YX5300 Board Layout")
+
+Communications Format
+---------------------
+The MP3 module communicates using asynchronous RS232 serial communication at
+9600 bps, 8 data bits, No parity, 1 stop bit, no flow control.
+
+Flow control is implemented using a serial RQST/RESP protocol based on data packets
+with the following byte format:
+
+|Packet Format (bytes) ||||||||
+|------|---------|--------|---------|----------|--------|--------|-----|
+|Start | Version | Length | Command | Feedback | DataHi | DataLo | End |
+
+
+|Byte      | Value | Description
+|:---------|------:|:----------------------------------------------------|
+| Start    | 0x7e  | The start of each packet, used for synchronization. |
+| Version  | 0xff  | Always the same value in this implementation.       |
+| Length   | 0x06  | Number of bytes between Start and End.              |
+| Command  | 0x??  | Command code for required action.                   |
+| Feedback | 0x01  | Set to 1 for protocol feedback, 0 for none.         |
+| DataHi   | 0x??  | Length-4 data bytes = 2 in this implementation.     |
+| DataLo   | 0x??  | ^                                                   |
+| End      | 0xef  | The end of each packet.                             |
+
+The message flow between the device and MCU is be displayed on the Serial 
+Monitor by the library when the C++ macro define LIBDEBUG is set to 1 in 
+the main code file.
+
+Sending and Receiving Serial Messages
+-------------------------------------
+This library manages the serial interface to the TX5300 by taking care of
+sending and receiving the serial messages. The MP3 Player responds to 
+command requests but it also sends unsolicited messages when certain events 
+occur (eg, TF card removed or inserted). These unsolicited messages may be 
+important to the application so the library implements mechanisms that 
+allow the application to process the relevant notification data by placing 
+it in a cbData structure. 
+
+How the cbData structure is received by the application is flexible and 
+depends on the setSynchronous() setting and whether a callback is defined. 
+This is summarized in the table below and explained in the text that follows.
+
+|       | Callback           | Polled             |
+|------:|:-------------------|:-------------------|
+| Sync  | _unsol_: callback  | _unsol_: check()   |
+| ^     | _resp_: ret status | _resp_: ret status |
+| Async | _unsol_: callback  | _unsol_: check()   |
+| ^     | _resp_: callback   | _resp_: check()    |
+
+The first choice is whether to process the message in line with the calling
+sequence (synchronous) or separately (asynchronously):
+- __Synchronous__: The command message is sent and the code waits for the 
+response before returning to the calling application. This is relatively
+inefficient of CPU time as it involves a busy wait, but is easy to implement
+in the application and is good for simple applications
+- __Asynchronous__: The command message is sent and the library immediately 
+returns. The response message is processed as it returns and the calling
+application can continue to run while this happens. Once the response is 
+received, the calling can be notified through a callback or polled status
+(see below).
+
+Independently of the sync/async mode, the application can choose to be 
+informed received messages are ready to process either by:
+- __Polling__: The return status of the check() method is used as the signal 
+that an unsolicited message has been received. In synchronous mode the return 
+code for the method invoked will be the status of check() for that request.
+- __Callback__: If a callback function is defined  (see setCallback()), every 
+unsolicited message received will be processed through the callback mechanism.
+In Synchronous mode, both the callback and the return code for the method 
+invoked will signal receipt of the same message, so the application code should
+guard against processing the message twice.
 
 \page pageCopyright Copyright
 Copyright (C) 2018 Marco Colli. All rights reserved.
@@ -114,71 +202,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 \page pageRevisionHistory Revision History
 Jul 2018 version 1.0.0
 - First Release
-
-\page pageSoftware Managing Communications
-
-![YX5300 Board Layout] (YX5300_Board_Layout.jpg "YX5300 Board Layout")
-
-Communications Format
----------------------
-The MP3 module communicates using asynchronous RS232 serial communication at
-9600 bps, 8 data bits, No parity, 1 stop bit, no flow control.
-
-Flow control is implemented using a serial RQST/RESP protocol based on data packets
-with the following byte format:
-
-|Packet Format (bytes) ||||||||
-|------|---------|--------|---------|----------|--------|--------|-----|
-|Start | Version | Length | Command | Feedback | DataHi | DataLo | End |
-
-
-|Byte      | Value | Description
-|:---------|------:|:----------------------------------------------------|
-| Start    | 0x7e	 | The start of each packet, used for synchronization. |
-| Version  | 0xff  | Always the same value in this implementation.       |
-| Length   | 0x06  | Number of bytes between Start and End.              |
-| Command  | 0x??  | Command code	for required action.                   |
-| Feedback | 0x01  | Set to 1 for protocol feedback, 0 for none.         |
-| DataHi   | 0x??  | Length-4 data bytes = 2 in this implementation.     |
-| DataLo   | 0x??  | ^                                                   |
-| End      | 0xef  | The end of each packet.                             |
-
-Sending and Receiving Serial Messages
--------------------------------------
-This library manages the serial interface to the TX5300 by taking care of
-sending and receiving the serial messages. This can be done in 2 modes, 
-selectable at run time:
-- __Synchronous__: The command message is sent and the code waits for the 
-response before returning to the calling application. This is relatively
-inefficient of CPU time as it involves a busy wait, but is easy to implement
-in the application and is good for simple applications
-- __Asynchronous__: The command message is sent and the library immediately 
-returns. The response message is processed as it returns and the calling
-application can continue to run while this happens. Once the response is 
-received, the calling can be notified through a callback or pollined status
-(see below).
-
-Independently of the synch/asynch mode, the application can choose to be 
-informed received messages are ready to process either by
-- __Polling__: The return status of the check() method is used as the signal 
-that an unsolicted message has been received. In synchronous mode the return 
-code for the method invoked will be the status of check() for that request.
-- __Callback__: If a callback function is defined  (see setCallback()), every 
-unsolicited message received will be processed through the callback mechanism.
-In Synchronous mode, both the callback and the return code for the method 
-invoked will signal receipt ofthe same message, so the application code should
-guard against processing the message twice.
-
-The interaction between Callback/Polled and Synch/Asynch is summarised in the 
-table below.
-
-|        | Callback           | Polled             |
-|-------:|:-------------------|:-------------------|
-| Synch  | _unsol_: cback     | _unsol_: check()   |
-| ^      | _resp_: ret status | _resp_: ret status |
-| Asynch | _unsol_: cback     | _unsol_: check()   |
-| ^      | _resp_: cback      | _resp_: check()    |
-
 */
 
 /**
@@ -200,7 +223,7 @@ public:
     STS_TF_INSERT = 0x3a,  ///< TF Card was inserted (unsolicited)
     STS_TF_REMOVE = 0x3b,  ///< TF card was removed (unsolicited)
     STS_FILE_END = 0x3d,   ///< Track/file has ended (unsolicited)
-    STS_INIT = 0x3f,       ///< Initialisation complete (unsolicited)
+    STS_INIT = 0x3f,       ///< Initialization complete (unsolicited)
     STS_ERR_FILE = 0x40,   ///< Error file not found
     STS_ACK_OK = 0x41,     ///< Message acknowledged ok
     STS_STATUS = 0x42,     ///< Current status
@@ -225,7 +248,7 @@ public:
   * | Method             | Return Status (code) | Return Data (data)                        
   * |:-------------------|:---------------------|:--------------------
   * | Unsolicited mesg   | STS_FILE_END         | Index number of the file just completed.
-  * | Unsolicited mesg   | STS_INIT             | Device initialisation complete - file store types available (0x02 for TF).
+  * | Unsolicited mesg   | STS_INIT             | Device initialization complete - file store types available (0x02 for TF).
   * | Unsolicited mesg   | STS_ERR_FILE         | File index
   * | queryStatus()      | STS_STATUS           | Current status. High byte is file store (0x02 for TF); low byte 0x00=stopped, 0x01=play, 0x02=paused.
   * | queryVolume()      | STS_VOLUME           | Current volume level [0..MAX_VOLUME].
@@ -247,11 +270,18 @@ public:
   * Instantiate a new instance of the class. The parameters passed are used to
   * connect the software to the hardware.
   *
+  * Parameters are required for SoftwareSerial initialization. If native
+  * serial port is used then dummy parameters need to be supplied.
+  *
   * \param pinRx The pin for receiving serial data, connected to the device Tx pin.
   * \param pinTx The pin for sending serial data, connected to the device Rx pin.
   */
-  MD_YX5300(uint8_t pinRx, uint8_t pinTx) :
-    _S(pinRx, pinTx), _timeout(200), _synch(true), _cbStatus(nullptr) {};
+  MD_YX5300(uint8_t pinRx, uint8_t pinTx) : 
+#if USE_SOFTWARESERIAL
+    _S(pinRx, pinTx),
+#endif
+  _timeout(200), _synch(true), _cbStatus(nullptr)
+    {};
 
  /**
   * Class Destructor.
@@ -277,7 +307,7 @@ public:
   *
   * The check function should be called repeatedly in loop() to allow the 
   * library to receive and process device messages. The MP3 device can send
-  * messages as a reponse to a request or unsolicited to inform of state changes,
+  * messages as a response to a request or unsolicited to inform of state changes,
   * such a track play completing. A true value returned indicates that a message 
   * has been received and the status is ready to be processed. 
   * 
@@ -321,7 +351,7 @@ public:
  /**
   * Set serial response timeout.
   *
-  * Set the device reponse timeout in milliseconds. If a message is not received
+  * Set the device response timeout in milliseconds. If a message is not received
   * within this time a timeout error status will be generated. The default timeout
   * is 200 milliseconds.
   *
@@ -394,11 +424,11 @@ public:
   */
 
  /**
-  * Set the readback device.
+  * Set the file store device.
   *
-  * Set the readback device to the specifed type. Currently the only type 
+  * Set the file store device to the specified type. Currently the only type 
   * available is a TF device (CMD_OPT_TF). The application should allow 200ms 
-  * for the file system to be initiliased before further interacting with the 
+  * for the file system to be initialized before further interacting with the 
   * MP3 device.
   *
   * The TF file system is set at begin() and this method should not need to 
@@ -421,7 +451,7 @@ public:
   * 
   * \sa check(), getStatus(), setSynchronous()
   *
-  * \param eqId the eualizer type requested [1..5].
+  * \param eqId the equalizer type requested [1..5].
   * \return In synchronous mode, true when the message has been received and processed. Otherwise
   *         ignore the return value and process using callback or check() and getStatus().
   */
@@ -443,7 +473,7 @@ public:
  /**
   * Set awake mode.
   *
-  * Wakes up the MP3 player from sleep mode. Use sleep() to enablke sleep mode.
+  * Wakes up the MP3 player from sleep mode. Use sleep() to enable sleep mode.
   *
   * \sa sleep(), check(), getStatus(), setSynchronous()
   *
@@ -483,7 +513,7 @@ public:
   /**
   * Reset the MP3 player.
   *
-  * Put the MP3 player into reste mode. The payer will return to its power up state.
+  * Put the MP3 player into reset mode. The payer will return to its power up state.
   * The application should allow 500ms between the rest command and any subsequent 
   * interaction with the device.
   *
@@ -530,7 +560,7 @@ public:
  /**
   * Stop playing the current MP3 file.
   *
-  * Stop playing the currenbt MP3 file and cancel the current playing mode.
+  * Stop playing the current MP3 file and cancel the current playing mode.
   * playPause() should be used for a temporary playing stop.
   *
   * \sa playPause(), check(), getStatus(), setSynchronous()
@@ -570,12 +600,12 @@ public:
  /**
   * Play a specific file.
   *
-  * Play a file by specifying the fiule index number.
+  * Play a file by specifying the file index number.
   * At the end of playing the file the device will send a STS_FILE_END message.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
-  * \param t the file indexd (0-255) to be played.
+  * \param t the file indexed (0-255) to be played.
   * \return In synchronous mode, true when the message has been received and processed. Otherwise
   *         ignore the return value and process using callback or check() and getStatus().
   */
@@ -685,7 +715,7 @@ public:
  /**
   * Mute the sound output.
   *
-  * Mute the sound output by supressing the output from the DAC. The MP3 file
+  * Mute the sound output by suppressing the output from the DAC. The MP3 file
   * will continue playing but will not be heard. To temporarily halt the playing use
   * playPause().
   *
@@ -801,7 +831,7 @@ public:
   * Request the count of files on the TF device.
   *
   * - cbData.code is STS_TOT_FILES.
-  * - cbData.data is the count of the files on te file store.
+  * - cbData.data is the count of the files on the file store.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
@@ -883,7 +913,9 @@ private:
   const uint8_t PKT_EOM = 0xef;       ///< End of message delimiter character
 
   // variables
+#if USE_SOFTWARESERIAL
   SoftwareSerial  _S; ///< used for communications
+#endif
 
   void(*_cbStatus)(const cbData *data); ///< callback function
   cbData _status;     ///< callback status data
