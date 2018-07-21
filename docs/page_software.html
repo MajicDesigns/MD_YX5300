@@ -99,12 +99,7 @@ YX5300 Board Layout</div></div>
  <h2>Communications Format </h2>
 <p>The MP3 module communicates using asynchronous RS232 serial communication at 9600 bps, 8 data bits, No parity, 1 stop bit, no flow control.</p>
 <p>Flow control is implemented using a serial RQST/RESP protocol based on data packets with the following byte format:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone" colspan="8">Packet Format (bytes)   </th></tr>
-<tr class="markdownTableBody" class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Start  </td><td class="markdownTableBodyNone">Version  </td><td class="markdownTableBodyNone">Length  </td><td class="markdownTableBodyNone">Command  </td><td class="markdownTableBodyNone">Feedback  </td><td class="markdownTableBodyNone">DataHi  </td><td class="markdownTableBodyNone">DataLo  </td><td class="markdownTableBodyNone">End   </td></tr>
-</table>
+<p>|Packet Format (bytes) ||||||||| |----&mdash;|------&mdash;|-----&mdash;|------&mdash;|-------&mdash;|-----&mdash;|-----&mdash;|------&mdash;|------&mdash;|--&mdash;| | Start | Version | Length | Command | Feedback | DataHi | DataLo | [ChkHi] | [ChkLo] | End |</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">Byte  </th><th class="markdownTableHeadRight">Value  </th><th class="markdownTableHeadLeft">Description   </th></tr>
@@ -113,7 +108,7 @@ YX5300 Board Layout</div></div>
 <tr class="markdownTableBody" class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">Version  </td><td class="markdownTableBodyRight">0xff  </td><td class="markdownTableBodyLeft">Always the same value in this implementation.   </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">Length  </td><td class="markdownTableBodyRight">0x06  </td><td class="markdownTableBodyLeft">Number of bytes between Start and End.   </td></tr>
+<td class="markdownTableBodyLeft">Length  </td><td class="markdownTableBodyRight">0x06  </td><td class="markdownTableBodyLeft">Number of bytes between Start and Chk.   </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">Command  </td><td class="markdownTableBodyRight">0x??  </td><td class="markdownTableBodyLeft">Command code for required action.   </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowOdd">
@@ -123,9 +118,14 @@ YX5300 Board Layout</div></div>
 <tr class="markdownTableBody" class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">DataLo  </td><td class="markdownTableBodyRight">0x??   </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">ChkHi  </td><td class="markdownTableBodyRight">0x??  </td><td class="markdownTableBodyLeft" rowspan="2">Optional checksum for bytes between Start and Chk.   </td></tr>
+<tr class="markdownTableBody" class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">ChkLo  </td><td class="markdownTableBodyRight">0x??   </td></tr>
+<tr class="markdownTableBody" class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">End  </td><td class="markdownTableBodyRight">0xef  </td><td class="markdownTableBodyLeft">The end of each packet.   </td></tr>
 </table>
 <p>The message flow between the device and MCU is be displayed on the Serial Monitor by the library when the C++ macro define LIBDEBUG is set to 1 in the main code file.</p>
+<p>The checksum is optional in the protocol packet. The library will use the checksum field if the C++ macro define USE_CHECKSUM is set to 1 in the header file.</p>
 <h2>Sending and Receiving Serial Messages </h2>
 <p>This library manages the serial interface to the TX5300 by taking care of sending and receiving the serial messages. The MP3 Player responds to command requests but it also sends unsolicited messages when certain events occur (eg, TF card removed or inserted). These unsolicited messages may be important to the application so the library implements mechanisms that allow the application to process the relevant notification data by placing it in a cbData structure.</p>
 <p>How the cbData structure is received by the application is flexible and depends on the setSynchronous() setting and whether a callback is defined. This is summarized in the table below and explained in the text that follows.</p>
@@ -155,7 +155,7 @@ YX5300 Board Layout</div></div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="index.html">Arduino Serial MP3 Player</a></li>
-    <li class="footer">Generated on Thu Jul 19 2018 17:14:38 for MD_YX5300 Library by
+    <li class="footer">Generated on Sat Jul 21 2018 17:05:00 for MD_YX5300 Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

@@ -4,6 +4,8 @@ var class_m_d___y_x5300 =
     [ "status_t", "class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512b", [
       [ "STS_OK", "class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba7f971a1bfd34a8de1cc1815502e98ca8", null ],
       [ "STS_TIMEOUT", "class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512baaa3f4484197fc33f0eabf1e78a7baf1a", null ],
+      [ "STS_VERSION", "class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512bace62365b70b789894da91524bfe0d898", null ],
+      [ "STS_CHECKSUM", "class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512bac63614233ffe0db7f78b7f0144fd7b49", null ],
       [ "STS_TF_INSERT", "class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba63d42f065f496ca09cf216e73830d1db", null ],
       [ "STS_TF_REMOVE", "class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512baf8358b143c53d30e75de521b2cb4bcd8", null ],
       [ "STS_FILE_END", "class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba34905554d8be656d86fa14d854b72afc", null ],

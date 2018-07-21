@@ -3,6 +3,7 @@
 
 
 #define USE_SOFTWARESERIAL  1   ///< Set to 1 to use SoftwareSerial library, 0 for native serial port
+#define USE_CHECKSUM        1   ///< Set to 1 to enable checksums in messages, 0 to disable
 
 #include <Arduino.h>
 #if USE_SOFTWARESERIAL
@@ -118,25 +119,31 @@ The MP3 module communicates using asynchronous RS232 serial communication at
 Flow control is implemented using a serial RQST/RESP protocol based on data packets
 with the following byte format:
 
-|Packet Format (bytes) ||||||||
-|------|---------|--------|---------|----------|--------|--------|-----|
-|Start | Version | Length | Command | Feedback | DataHi | DataLo | End |
+|Packet Format (bytes) |||||||||
+|-------|---------|--------|---------|----------|--------|--------|---------|---------|-----|
+| Start | Version | Length | Command | Feedback | DataHi | DataLo | [ChkHi] | [ChkLo] | End |
 
 
 |Byte      | Value | Description
 |:---------|------:|:----------------------------------------------------|
 | Start    | 0x7e  | The start of each packet, used for synchronization. |
 | Version  | 0xff  | Always the same value in this implementation.       |
-| Length   | 0x06  | Number of bytes between Start and End.              |
+| Length   | 0x06  | Number of bytes between Start and Chk.              |
 | Command  | 0x??  | Command code for required action.                   |
 | Feedback | 0x01  | Set to 1 for protocol feedback, 0 for none.         |
 | DataHi   | 0x??  | Length-4 data bytes = 2 in this implementation.     |
 | DataLo   | 0x??  | ^                                                   |
+| ChkHi    | 0x??  | Optional checksum for bytes between Start and Chk.  |
+| ChkLo    | 0x??  | ^                                                   |
 | End      | 0xef  | The end of each packet.                             |
 
 The message flow between the device and MCU is be displayed on the Serial 
 Monitor by the library when the C++ macro define LIBDEBUG is set to 1 in 
 the main code file.
+
+The checksum is optional in the protocol packet. The library will use the 
+checksum field if the C++ macro define USE_CHECKSUM is set to 1 in the header
+file.
 
 Sending and Receiving Serial Messages
 -------------------------------------
@@ -220,6 +227,8 @@ public:
   {
     STS_OK = 0x00,         ///< No error (library generated status)
     STS_TIMEOUT = 0x01,    ///< Timeout on response message (library generated status)
+    STS_VERSION = 0x02,    ///< Wrong version number in return message (library generated status)
+    STS_CHECKSUM = 0x03,   ///< response checksum does not match data (library generated status)
     STS_TF_INSERT = 0x3a,  ///< TF Card was inserted (unsolicited)
     STS_TF_REMOVE = 0x3b,  ///< TF card was removed (unsolicited)
     STS_FILE_END = 0x3d,   ///< Track/file has ended (unsolicited)
@@ -929,6 +938,7 @@ private:
   bool _waitResponse; ///< true when we are waiting response to a query
 
   // Methods
+  int16_t checksum(uint8_t *data, uint8_t len);               ///< Protocol packet checksum calculation
   bool sendRqst(cmdSet_t cmd, uint8_t data1, uint8_t data2);  ///< Send serial message (Rqst)
   void processResponse(bool bTimeout = false);                ///< Process a serial response message
   void dumpMessage(uint8_t *msg, uint8_t len, char *psz);     ///< Dump a message to the debug stream

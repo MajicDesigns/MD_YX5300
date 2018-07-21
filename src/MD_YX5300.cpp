@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))  ///< Generic array element count macro
 
-#define LIBDEBUG  0   ///< Set to 1 to enable Debug statement in the library
+#define LIBDEBUG  1   ///< Set to 1 to enable Debug statement in the library
 
 #if LIBDEBUG
 #define PRINT(s, v)   { Serial.print(F(s)); Serial.print(v); }      ///< Print a string followed by a value (decimal)
@@ -90,15 +90,45 @@ bool MD_YX5300::check(void)
   return(c == PKT_EOM);   // we have just processed a response
 }
 
+int16_t MD_YX5300::checksum(uint8_t *data, uint8_t len)
+{
+  int16_t sum = 0;
+
+  for (uint8_t i = 0; i < len; i++)
+    sum += data[i];
+
+  return(-sum);
+}
+
 bool MD_YX5300::sendRqst(cmdSet_t cmd, uint8_t data1, uint8_t data2)
 // returns true if the response status is ready for processing
 {
-  static uint8_t msg[] = { PKT_SOM, PKT_VER, PKT_LEN, CMD_NUL, PKT_FB_ON, PKT_DATA_NUL, PKT_DATA_NUL, PKT_EOM };
+  static uint8_t msg[] = 
+  { 
+    PKT_SOM,      // 0: Start
+    PKT_VER,      // 1: Version
+    PKT_LEN,      // 2: Length
+    CMD_NUL,      // 3: Command
+    PKT_FB_ON,    // 4: Feedback
+    PKT_DATA_NUL, // 5: Data Hi
+    PKT_DATA_NUL, // 6: Data Lo
+#if USE_CHECKSUM
+    PKT_DATA_NUL, // [7]: Checksum Hi (optional)
+    PKT_DATA_NUL, // [8]: Checksum Lo (optional)
+#endif
+    PKT_EOM       // 7, [9]: End
+  };
 
   msg[3] = cmd;
-  // msg[4] = _synch ? PKT_FB_ON : PKT_FB_OFF;
   msg[5] = data1;
   msg[6] = data2;
+
+#if USE_CHECKSUM
+  int16_t chk = checksum(&msg[1], msg[2]);
+
+  msg[7] = (uint8_t)(chk >> 8);
+  msg[8] = (uint8_t)(chk & 0x00ff);
+#endif
 
   _S.write(msg, ARRAY_SIZE(msg));
   _timeSent = millis();
@@ -125,11 +155,26 @@ void MD_YX5300::processResponse(bool bTimeout = false)
 #if LIBDEBUG
   dumpMessage(_bufRx, _bufIdx, "R");
 #endif
-  _waitResponse = false;    // definituely no longer waiting
+  _waitResponse = false;    // definitely no longer waiting
 
-  // set the status memory up with current return codes
-  _status.code = (bTimeout ? STS_TIMEOUT : _bufRx[3]);
-  _status.data = 0;
+#if USE_CHECKSUM
+  int16_t chk = checksum(&_bufRx[1], _bufRx[2]);
+  int16_t chkRcv = ((int16_t)_bufRx[7] << 8) + _bufRx[8];
+#endif
+
+  // initialise to most probable message outcome
+  _status.code = _bufRx[3];
+  _status.data = ((uint16_t)_bufRx[5] << 8) | _bufRx[6];
+
+  // now override with message packet errors, if any
+  if (bTimeout)
+    _status.code = STS_TIMEOUT;
+  else if (_bufRx[1] != PKT_VER)
+    _status.code = STS_VERSION;
+#if USE_CHECKSUM
+  else if (chk != chkRcv)
+    _status.code = STS_CHECKSUM;
+#endif
 
   PRINTX(" -> ", _status.code);
   PRINTS(" : ");
@@ -139,20 +184,24 @@ void MD_YX5300::processResponse(bool bTimeout = false)
   {
   case STS_OK:         PRINTS("OK");          break;
   case STS_TIMEOUT:    PRINTS("Timeout");     break;
+  case STS_VERSION:    PRINTS("Ver error");   break;
+#if USE_CHECKSUM
+  case STS_CHECKSUM:   PRINT("Chk error calc=", chk); PRINT(" rcv=", chkRcv); break;
+#endif
   case STS_TF_INSERT:  PRINTS("TF inserted"); break;
   case STS_TF_REMOVE:  PRINTS("TF removed");  break;
   case STS_ACK_OK:     PRINTS("Ack OK");      break;
-  case STS_ERR_FILE:   _status.data = _bufRx[6]; PRINT("File Error ", _status.data);   break;
-  case STS_INIT:       _status.data = _bufRx[6]; PRINTX("Init 0x", _status.data);      break;
-  case STS_FILE_END:   _status.data = _bufRx[6]; PRINT("Ended track ", _status.data);  break;
-  case STS_STATUS:     _status.data = (_bufRx[5] << 8) | _bufRx[6]; PRINTX("Status 0x", _status.data);      break;
-  case STS_EQUALIZER:  _status.data = _bufRx[6]; PRINT("Equalizer ", _status.data);    break;
-  case STS_VOLUME:     _status.data = _bufRx[6]; PRINT("Vol ", _status.data);          break;
-  case STS_TOT_FILES:  _status.data = _bufRx[6]; PRINT("Tot files ", _status.data);    break;
-  case STS_PLAYING:    _status.data = _bufRx[6]; PRINT("Playing File ", _status.data); break;
-  case STS_FLDR_FILES: _status.data = _bufRx[6]; PRINT("Folder files ", _status.data); break;
-  case STS_TOT_FLDR:   _status.data = _bufRx[6]; PRINT("Tot folder: ", _status.data);  break;
-  default:             _status.data = _bufRx[6]; PRINTS("Unknown Status Code");        break;
+  case STS_ERR_FILE:   PRINT("File Error ", _status.data);   break;
+  case STS_INIT:       PRINTX("Init 0x", _status.data);      break;
+  case STS_FILE_END:   PRINT("Ended track ", _status.data);  break;
+  case STS_STATUS:     PRINTX("Status 0x", _status.data);      break;
+  case STS_EQUALIZER:  PRINT("Equalizer ", _status.data);    break;
+  case STS_VOLUME:     PRINT("Vol ", _status.data);          break;
+  case STS_TOT_FILES:  PRINT("Tot files ", _status.data);    break;
+  case STS_PLAYING:    PRINT("Playing File ", _status.data); break;
+  case STS_FLDR_FILES: PRINT("Folder files ", _status.data); break;
+  case STS_TOT_FLDR:   PRINT("Tot folder: ", _status.data);  break;
+  default:             PRINTS("Unknown Status Code");        break;
   }
 
   // finally, call the callback if there is one
