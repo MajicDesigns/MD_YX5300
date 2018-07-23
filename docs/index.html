@@ -98,16 +98,16 @@ $(document).ready(function(){initNavTree('index.html','');});
 <img src="YX5300_Serial_MP3_Player.jpg" alt="YX5300_Serial_MP3_Player.jpg"/>
 <div class="caption">
 YX5300 Serial MP3 Player</div></div>
-<p> The YX5300 supports 8k Hz ~ 48k Hz sampling frequency MP3 and WAV file formats. The audio files are stored on a micro SD card that plugs into a TF card socket on the back of the board. The MCU controls the MP3 playback by sending serial commands to the module via the UART port.</p>
+<p> The YX5300 supports 8kHz to 48kHz sampling frequency MP3 and WAV file formats. The audio files are stored on a micro SD card that plugs into a TF card socket on the back of the board. The MCU controls the MP3 playback by sending serial commands to the module via the UART port.</p>
 <h2>Module Interfaces </h2>
 <div class="image">
 <img src="YX5300_Catalex_Layout.png" alt="YX5300_Catalex_Layout.png"/>
 <div class="caption">
 YX5300 Catalex Layout</div></div>
 <ul>
-<li><b>Control interface</b> is a UART TTL interface (GND, VCC, TX, RX). PIns are connected GND to MCU ground, VCC to 5V power supply, YX5300 TX (transmit) to the designated RX (receive) pin for the SoftwareSerial library, YX5300 RX to SoftwareSerial TX.</li>
+<li><b>Control interface</b> is a UART TTL interface (GND, VCC, TX, RX). Pins are connected GND to MCU ground, VCC to 5V power supply, YX5300 TX (transmit) to the designated RX (receive) pin for the SoftwareSerial library, YX5300 RX to SoftwareSerial TX.</li>
 <li><b>TF card socket</b> on the reverse side of the PCB for plugging in the micro SD card with MP3/WAV files.</li>
-<li><b>Playback indicator</b> (green LED) blinks dusing playback, steady otherwise.</li>
+<li><b>Playback indicator</b> (green LED) blinks during playback, steady otherwise.</li>
 <li><b>Headphone jack</b> for sound output to headphones or external amplifier.</li>
 </ul>
 <h2>MP3/WAV File </h2>
@@ -127,7 +127,6 @@ YX5300 Catalex Layout</div></div>
 <h2>Known Issues </h2>
 <ul>
 <li>equalizer() command is accepted but not actioned by device. Documentation seems to indicate that this function may be disabled in the hardware (Chinese translation is ambiguous).</li>
-<li>playFolderFile() command always returns ERR_FILE with valid parameters.</li>
 <li>playFolderShuffle() command is accepted but not actioned by the device.</li>
 <li>shuffle() command is accepted but not seem to shuffle files playback. </li>
 </ul>
@@ -136,7 +135,7 @@ YX5300 Catalex Layout</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat Jul 21 2018 17:05:00 for MD_YX5300 Library by
+    <li class="footer">Generated on Mon Jul 23 2018 15:57:39 for MD_YX5300 Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

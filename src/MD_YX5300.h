@@ -28,7 +28,7 @@ request/response sequences, simplifying running the device as a background task.
 
 ![YX5300 Serial MP3 Player] (YX5300_Serial_MP3_Player.jpg "YX5300 Serial MP3 Player")
 
-The YX5300 supports 8k Hz ~ 48k Hz sampling frequency MP3 and WAV file formats. 
+The YX5300 supports 8kHz to 48kHz sampling frequency MP3 and WAV file formats. 
 The audio files are stored on a micro SD card that plugs into a TF card socket on 
 the back of the board. The MCU controls the MP3 playback by sending serial commands 
 to the module via the UART port.
@@ -37,12 +37,12 @@ Module Interfaces
 -----------------
 ![YX5300 Catalex Layout] (YX5300_Catalex_Layout.png "YX5300 Catalex Module Layout")
 
-- __Control interface__ is a UART TTL interface (GND, VCC, TX, RX). PIns are connected 
+- __Control interface__ is a UART TTL interface (GND, VCC, TX, RX). Pins are connected 
 GND to MCU ground, VCC to 5V power supply, YX5300 TX (transmit) to the designated 
 RX (receive) pin for the SoftwareSerial library, YX5300 RX to SoftwareSerial TX.
 - __TF card socket__ on the reverse side of the PCB for plugging in the micro SD 
 card with MP3/WAV files.
-- __Playback indicator__ (green LED) blinks dusing playback, steady otherwise.
+- __Playback indicator__ (green LED) blinks during playback, steady otherwise.
 - __Headphone jack__ for sound output to headphones or external amplifier.
 
 MP3/WAV File
@@ -91,7 +91,6 @@ Known Issues
 ------------
 - equalizer() command is accepted but not actioned by device. Documentation seems to indicate that
 this function may be disabled in the hardware (Chinese translation is ambiguous).
-- playFolderFile() command always returns ERR_FILE with valid parameters.
 - playFolderShuffle() command is accepted but not actioned by the device.
 - shuffle() command is accepted but not seem to shuffle files playback.
 
@@ -228,7 +227,7 @@ public:
     STS_OK = 0x00,         ///< No error (library generated status)
     STS_TIMEOUT = 0x01,    ///< Timeout on response message (library generated status)
     STS_VERSION = 0x02,    ///< Wrong version number in return message (library generated status)
-    STS_CHECKSUM = 0x03,   ///< response checksum does not match data (library generated status)
+    STS_CHECKSUM = 0x03,   ///< Device checksum invalid (library generated status)
     STS_TF_INSERT = 0x3a,  ///< TF Card was inserted (unsolicited)
     STS_TF_REMOVE = 0x3b,  ///< TF card was removed (unsolicited)
     STS_FILE_END = 0x3d,   ///< Track/file has ended (unsolicited)
@@ -894,7 +893,7 @@ private:
     CMD_SHUFFLE_PLAY = 0x18,    ///< Playback shuffle mode
     CMD_SET_SNGL_CYCL = 0x19,   ///< Set loop play (repeat) on/off for current file
     CMD_SET_DAC = 0x1a,         ///< DAC on/off control
-    CMD_PLAY_W_VOL = 0x22,      ///< Volume set to the specified level
+    CMD_PLAY_W_VOL = 0x22,      ///< Play track at the specified volume
     CMD_SHUFFLE_FOLDER = 0x28,  ///< Playback shuffle mode for folder specified
     CMD_QUERY_STATUS = 0x42,    ///< Query Device Status
     CMD_QUERY_VOLUME = 0x43,    ///< Query Volume level
