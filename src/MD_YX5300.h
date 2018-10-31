@@ -286,7 +286,7 @@ public:
   */
   MD_YX5300(uint8_t pinRx, uint8_t pinTx) : 
 #if USE_SOFTWARESERIAL
-    _S(pinRx, pinTx),
+    _Serial(pinRx, pinTx),
 #endif
   _timeout(200), _synch(true), _cbStatus(nullptr)
     {};
@@ -922,7 +922,7 @@ private:
 
   // variables
 #if USE_SOFTWARESERIAL
-  SoftwareSerial  _S; ///< used for communications
+  SoftwareSerial  _Serial; ///< used for communications
 #endif
 
   void(*_cbStatus)(const cbData *data); ///< callback function

@@ -44,7 +44,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 void MD_YX5300::begin(void)
 {
-  _S.begin(9600);
+  _Serial.begin(9600);
   reset();
   delay(500);   // wait for the rest to occur
   device(CMD_OPT_DEV_TF);
@@ -64,13 +64,13 @@ bool MD_YX5300::check(void)
   }
 
   // check if any characters available
-  if (!_S.available())
+  if (!_Serial.available())
     return(false);
 
   // process all the characters waiting
   do
   {
-    c = _S.read();
+    c = _Serial.read();
  
     if (c == PKT_SOM) _bufIdx = 0;      // start of message - reset the index
     
@@ -78,7 +78,7 @@ bool MD_YX5300::check(void)
 
     if (_bufIdx >= ARRAY_SIZE(_bufRx))  // keep index within array memory bounds
       _bufIdx = ARRAY_SIZE(_bufRx) - 1;
-  } while (_S.available() && c != PKT_EOM);
+  } while (_Serial.available() && c != PKT_EOM);
 
   // check if we have a whole message to 
   // process and do something with it here!
@@ -130,7 +130,7 @@ bool MD_YX5300::sendRqst(cmdSet_t cmd, uint8_t data1, uint8_t data2)
   msg[8] = (uint8_t)(chk & 0x00ff);
 #endif
 
-  _S.write(msg, ARRAY_SIZE(msg));
+  _Serial.write(msg, ARRAY_SIZE(msg));
   _timeSent = millis();
   _status.code = STS_OK;
   _waitResponse = true;
@@ -150,7 +150,7 @@ bool MD_YX5300::sendRqst(cmdSet_t cmd, uint8_t data1, uint8_t data2)
   return(false);
 }
 
-void MD_YX5300::processResponse(bool bTimeout = false)
+void MD_YX5300::processResponse(bool bTimeout)
 {
 #if LIBDEBUG
   dumpMessage(_bufRx, _bufIdx, "R");
@@ -163,7 +163,7 @@ void MD_YX5300::processResponse(bool bTimeout = false)
 #endif
 
   // initialise to most probable message outcome
-  _status.code = _bufRx[3];
+  _status.code = (status_t)_bufRx[3];
   _status.data = ((uint16_t)_bufRx[5] << 8) | _bufRx[6];
 
   // now override with message packet errors, if any
