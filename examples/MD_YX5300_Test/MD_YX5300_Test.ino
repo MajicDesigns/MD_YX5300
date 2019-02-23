@@ -18,10 +18,10 @@ void cbResponse(const MD_YX5300::cbData *status)
 // Used to process device responses either as a library callback function
 // or called locally when not in callback mode.
 {
-  if (bUseCallback)
-    Serial.print(F("\nCback status: "));
-  else
+  if (bUseSynch)
     Serial.print(F("\nSync Status: "));
+  else
+    Serial.print(F("\nCback status: "));
 
   switch (status->code)
   {

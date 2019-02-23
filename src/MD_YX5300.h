@@ -206,6 +206,13 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 \page pageRevisionHistory Revision History
+Feb 2019 version 1.1.0
+- Fixed some issues with handling device initialization status messages at begin()
+- Added 20ms delay to serial write to prevent timeouts as the device needs 10ms to process the serial request.
+
+Oct 2018 version 1.0.1
+- Duplicate _S in the ESP8266 library fixed
+
 Jul 2018 version 1.0.0
 - First Release
 */
@@ -288,7 +295,7 @@ public:
 #if USE_SOFTWARESERIAL
     _Serial(pinRx, pinTx),
 #endif
-  _timeout(200), _synch(true), _cbStatus(nullptr)
+  _timeout(1000), _synch(true), _cbStatus(nullptr)
     {};
 
  /**

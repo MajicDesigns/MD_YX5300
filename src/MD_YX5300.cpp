@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))  ///< Generic array element count macro
 
-#define LIBDEBUG  1   ///< Set to 1 to enable Debug statement in the library
+#define LIBDEBUG  0   ///< Set to 1 to enable Debug statement in the library
 
 #if LIBDEBUG
 #define PRINT(s, v)   { Serial.print(F(s)); Serial.print(v); }      ///< Print a string followed by a value (decimal)
@@ -44,11 +44,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 void MD_YX5300::begin(void)
 {
+  uint32_t time = _timeout;
+
   _Serial.begin(9600);
-  reset();
-  delay(500);   // wait for the rest to occur
-  device(CMD_OPT_DEV_TF);
-  delay(200);   // wait for the file system to be initialized
+  _timeout = 2000;  // initialisation timeout needs to be a long one
+  reset();          // long timeout on this message
+  _timeout = time;  // put back saved value
+
+  // set the TF card system.
+  // The synchronous call will return when the command is accepted
+  // then it will be followed by an initialisation message saying TF card is inserted.
+  // Doc says this should be 200ms, so we set a tmeout for 1000ms.
+  device(CMD_OPT_DEV_TF); // set the TF card file system
+  time = millis();
+  while (!check()) 
+  {
+    if (millis() - time >= 1000) break;
+  }
 }
 
 bool MD_YX5300::check(void)
@@ -131,12 +143,17 @@ bool MD_YX5300::sendRqst(cmdSet_t cmd, uint8_t data1, uint8_t data2)
 #endif
 
   _Serial.write(msg, ARRAY_SIZE(msg));
-  _timeSent = millis();
-  _status.code = STS_OK;
-  _waitResponse = true;
+
 #if LIBDEBUG
   dumpMessage(msg, ARRAY_SIZE(msg), "S");
 #endif
+  // according to the documentation, the device takes about 
+  // 20ms to process the message, so we should delay to 
+  // avoid overloading the device.
+  delay(20);
+  _timeSent = millis();
+  _status.code = STS_OK;
+  _waitResponse = true;
 
   // if synchronous mode enabled, wait for a 
   // response message to be processed
@@ -218,8 +235,20 @@ char MD_YX5300::itoh(uint8_t i)
 void MD_YX5300::dumpMessage(uint8_t *msg, uint8_t len, char *psz)
 {
   char sz[3] = "00";
+  uint32_t maxMillis = 1000000L;
+  uint32_t time = millis();
 
-  PRINT("\n", psz); PRINTS(": ");
+  PRINTS("\n");
+  // print the timestamp
+  while (maxMillis > time && maxMillis > 0)   //do leading zeros
+  {
+    PRINTS("0");
+    maxMillis /= 10;
+  }
+  PRINT("", millis());      // now the time
+
+  // now the rest of dump message
+  PRINT(" ", psz); PRINTS(": ");
   for (uint8_t i=0; i<len; i++, msg++)
   {
     sz[0] = itoh((*msg & 0xf0) >> 4);
