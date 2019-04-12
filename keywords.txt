@@ -32,6 +32,7 @@ playSpecific	KEYWORD2
 playFolderRepeat	KEYWORD2
 playFolderShuffle	KEYWORD2
 volume	KEYWORD2
+volumeMax	KEYWORD2
 volumeInc	KEYWORD2
 volumeDec	KEYWORD2
 volumeMute	KEYWORD2

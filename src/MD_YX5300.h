@@ -118,9 +118,9 @@ The MP3 module communicates using asynchronous RS232 serial communication at
 Flow control is implemented using a serial RQST/RESP protocol based on data packets
 with the following byte format:
 
-|Packet Format (bytes) |||||||||
 |-------|---------|--------|---------|----------|--------|--------|---------|---------|-----|
 | Start | Version | Length | Command | Feedback | DataHi | DataLo | [ChkHi] | [ChkLo] | End |
+|-------|---------|--------|---------|----------|--------|--------|---------|---------|-----|
 
 
 |Byte      | Value | Description
@@ -135,6 +135,7 @@ with the following byte format:
 | ChkHi    | 0x??  | Optional checksum for bytes between Start and Chk.  |
 | ChkLo    | 0x??  | ^                                                   |
 | End      | 0xef  | The end of each packet.                             |
+|----------|-------|-----------------------------------------------------|
 
 The message flow between the device and MCU is be displayed on the Serial 
 Monitor by the library when the C++ macro define LIBDEBUG is set to 1 in 
@@ -206,6 +207,9 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 \page pageRevisionHistory Revision History
+Apr 2019 version 1.2.0
+- Added Simple player example
+
 Feb 2019 version 1.1.0
 - Fixed some issues with handling device initialization status messages at begin()
 - Added 20ms delay to serial write to prevent timeouts as the device needs 10ms to process the serial request.
@@ -693,17 +697,28 @@ public:
  /**
   * Set specified volume.
   *
-  * Set the output volume to the specified level. Maximum volume is 30.
+  * Set the output volume to the specified level. Maximum volume is volumeMax().
   *
   * \sa volumeInc(), volumeDec(), check(), getStatus(), setSynchronous()
   *
-  * \param vol the volume specified [0..30].
+  * \param vol the volume specified [0..MAX_VOLUME].
   * \return In synchronous mode, true when the message has been received and processed. Otherwise
   *         ignore the return value and process using callback or check() and getStatus().
   */
-  inline bool volume(uint8_t vol) { return sendRqst(CMD_SET_VOLUME, PKT_DATA_NUL, (vol > MAX_VOLUME ? MAX_VOLUME : vol)); }
+  inline bool volume(uint8_t vol) { return sendRqst(CMD_SET_VOLUME, PKT_DATA_NUL, (vol > volumeMax() ? volumeMax() : vol)); }
 
- /**
+  /**
+  * Get the Maximum possible volume.
+  *
+  * Return the maximum allowable volume level.
+  *
+  * \sa volumeInc(), volumeDec(), check(), getStatus(), setSynchronous()
+  *
+  * \return The maximum volume level.
+  */
+  inline uint8_t volumeMax(void) { return (MAX_VOLUME); }
+
+  /**
   * Increment the volume.
   *
   * Increment the output volume by 1.
@@ -874,7 +889,7 @@ public:
 
 private:
   // Miscellaneous
-  const uint8_t MAX_VOLUME = 30;  // Maximum allowed volume setting
+  const uint8_t MAX_VOLUME = 30;  ///< Maximum allowed volume setting
 
   // Enumerated type for serial message commands
   enum cmdSet_t
