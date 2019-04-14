@@ -116,11 +116,9 @@ The MP3 module communicates using asynchronous RS232 serial communication at
 9600 bps, 8 data bits, No parity, 1 stop bit, no flow control.
 
 Flow control is implemented using a serial RQST/RESP protocol based on data packets
-with the following byte format:
+with the following byte sequence:
 
-|-------|---------|--------|---------|----------|--------|--------|---------|---------|-----|
-| Start | Version | Length | Command | Feedback | DataHi | DataLo | [ChkHi] | [ChkLo] | End |
-|-------|---------|--------|---------|----------|--------|--------|---------|---------|-----|
+![YX5300 Packet Structure] (YX5300_Packet_Structure.png)
 
 
 |Byte      | Value | Description
@@ -128,22 +126,47 @@ with the following byte format:
 | Start    | 0x7e  | The start of each packet, used for synchronization. |
 | Version  | 0xff  | Always the same value in this implementation.       |
 | Length   | 0x06  | Number of bytes between Start and Chk.              |
-| Command  | 0x??  | Command code for required action.                   |
-| Feedback | 0x01  | Set to 1 for protocol feedback, 0 for none.         |
+| Cmd      | 0x??  | Command code for required action.                   |
+| Fback    | 0x01  | Set to 1 for protocol feedback, 0 for none.         |
 | DataHi   | 0x??  | Length-4 data bytes = 2 in this implementation.     |
 | DataLo   | 0x??  | ^                                                   |
 | ChkHi    | 0x??  | Optional checksum for bytes between Start and Chk.  |
 | ChkLo    | 0x??  | ^                                                   |
 | End      | 0xef  | The end of each packet.                             |
-|----------|-------|-----------------------------------------------------|
 
-The message flow between the device and MCU is be displayed on the Serial 
-Monitor by the library when the C++ macro define LIBDEBUG is set to 1 in 
-the main code file.
 
 The checksum is optional in the protocol packet. The library will use the 
 checksum field if the C++ macro define USE_CHECKSUM is set to 1 in the header
 file.
+
+Message Flow
+------------
+The message flow between the device and MCU can be displayed on the Serial 
+Monitor by the library when the C++ macro define LIBDEBUG is set to 1 in 
+the main code file.
+
+Message are of 2 basic types.
+
+- The first type is a simple message to set or 
+cause an action in the Device. In this case the messages are exchanged as one 
+message/acknowledge pair.
+
+\msc
+  Host,YX5300;
+  Host->YX5300 [label=request];
+  Host<-YX5300 [label=ack];
+\endmsc
+ 
+- The second type is a message that is requesting information from the YX5300. In this case the simple message flow is followed a short time later by another message from the device containing the requested data.
+
+\msc
+  Host,YX5300;
+  Host->YX5300 [label=request];
+  Host<-YX5300 [label=ack];
+  ...;
+  Host<-YX5300 [label=data];
+  Host->YX5300 [label=ack];
+\endmsc
 
 Sending and Receiving Serial Messages
 -------------------------------------
@@ -171,23 +194,126 @@ sequence (synchronous) or separately (asynchronously):
 - __Synchronous__: The command message is sent and the code waits for the 
 response before returning to the calling application. This is relatively
 inefficient of CPU time as it involves a busy wait, but is easy to implement
-in the application and is good for simple applications
+in code flow and is good for non-critical applications.
+
+\msc
+  Host,Library,YX5300;
+  Host=>Library [label="method call"];
+  Library->YX5300 [label=request];
+  Library<-YX5300 [label=ack];
+  Host<<Library [label="method return"];
+\endmsc
+
 - __Asynchronous__: The command message is sent and the library immediately 
 returns. The response message is processed as it returns and the calling
 application can continue to run while this happens. Once the response is 
 received, the calling can be notified through a callback or polled status
 (see below).
 
+\msc
+  Host,Library,YX5300;
+  Host=>Library [label="method call"];
+  Library->YX5300 [label=request];
+  Host<<Library [label="method return"];
+  ...;
+  Library<-YX5300 [label=ack];
+  Host<<=Library [label="status (callback or polled)"];
+\endmsc
+
 Independently of the sync/async mode, the application can choose to be 
 informed received messages are ready to process either by:
 - __Polling__: The return status of the check() method is used as the signal 
 that an unsolicited message has been received. In synchronous mode the return 
 code for the method invoked will be the status of check() for that request.
+
+_Synchronous polled return flow_
+\msc
+  Host,Library,YX5300;
+  Host=>Library [label="method call"];
+  Library->YX5300 [label=request];
+  Library<-YX5300 [label=ack];
+  Host<<Library [label="method return"];
+  --- [label="data message if required"];
+  ...;
+  Library<-YX5300 [label="data message"];
+  Library->YX5300 [label=ack];
+  ...;
+  Host=>Library [label="check()"];
+  Host<<Library [label="return true"];
+  Host=>Library [label="getStatus()"];
+  Host<<Library [label="cbData structure"];
+\endmsc
+
+_Asynchronous polled return flow_
+\msc
+  Host,Library,YX5300;
+  Host=>Library [label="method call"];
+  Library->YX5300 [label=request];
+  Host<<Library [label="method return"];
+  ...;
+  Library<-YX5300 [label=ack];
+  ...;
+  Host=>Library [label="check()"];
+  Host<<Library [label="return true"];
+  Host=>Library [label="getStatus()"];
+  Host<<Library [label="cbData structure"];
+  --- [label="data message if required"];
+  ...;
+  Library<-YX5300 [label="data message"];
+  Library->YX5300 [label=ack];
+  ...;
+  Host=>Library [label="check()"];
+  Host<<Library [label="return true"];
+  Host=>Library [label="getStatus()"];
+  Host<<Library [label="cbData structure"];
+\endmsc
+
+
 - __Callback__: If a callback function is defined  (see setCallback()), every 
 unsolicited message received will be processed through the callback mechanism.
 In Synchronous mode, both the callback and the return code for the method 
 invoked will signal receipt of the same message, so the application code should
 guard against processing the message twice.
+
+_Synchronous callback return flow_
+\msc
+  Host,Library,YX5300;
+  Host=>Library [label="method call"];
+  Library->YX5300 [label=request];
+  Library<-YX5300 [label=ack];
+  Host<<Library [label="method return"];
+  --- [label="data message if required"];
+  ...;
+  Library<-YX5300 [label="data message"];
+  Library->YX5300 [label=ack];
+  ...;
+  Host=>Library [label="check()"];
+  Host<<Library [label="callback cbData"];
+  Host<<Library [label="check() return true"];
+\endmsc
+
+_Asynchronous callback return flow_
+\msc
+  Host,Library,YX5300;
+  Host=>Library [label="method call"];
+  Library->YX5300 [label=request];
+  Host<<Library [label="method return"];
+  ...;
+  Library<-YX5300 [label=ack];
+  ...;
+  Host=>Library [label="check()"];
+  Host<<Library [label="cbData structure"];
+  Host<<Library [label="check() return true"];
+  --- [label="data message if required"];
+  ...;
+  Library<-YX5300 [label="data message"];
+  Library->YX5300 [label=ack];
+  ...;
+  Host=>Library [label="check()"];
+  Host<<Library [label="callback cbData structure"];
+  Host<<Library [label="check() return true"];
+\endmsc
+
 
 \page pageCopyright Copyright
 Copyright (C) 2018 Marco Colli. All rights reserved.
@@ -207,8 +333,10 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 \page pageRevisionHistory Revision History
-Apr 2019 version 1.2.0
+Apr 2019 version 1.2.0, 1.2.1
 - Added Simple player example
+- Added LCD player example
+- Improved documentation for message flow
 
 Feb 2019 version 1.1.0
 - Fixed some issues with handling device initialization status messages at begin()

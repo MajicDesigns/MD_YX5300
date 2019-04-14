@@ -17,12 +17,12 @@
 #include <MD_UISwitch.h>
 
 // Connections for serial interface to the YX5300 module
-const uint8_t ARDUINO_RX = 5;  // connect to TX of MP3 Player module
-const uint8_t ARDUINO_TX = 6;  // connect to RX of MP3 Player module
+const uint8_t ARDUINO_RX = 4;    // connect to TX of MP3 Player module
+const uint8_t ARDUINO_TX = 5;    // connect to RX of MP3 Player module
 
-const uint8_t SW_PLAY_PAUSE = 7; // play/pause toggle digital pin, active low (PULLUP)
-const uint8_t SW_PLAY_NEXT = 8;  // play next track digital pin, active low (PULLUP)
-const uint8_t PIN_LED = 9;       // LED to show status
+const uint8_t SW_PLAY_PAUSE = 2; // play/pause toggle digital pin, active low (PULLUP)
+const uint8_t SW_PLAY_NEXT = 3;  // play next track digital pin, active low (PULLUP)
+const uint8_t PIN_LED = 4;       // LED to show status
 const uint8_t POT_VOLUME = A0;   // volume control pot analog pin
 
 const uint8_t PLAY_FOLDER = 1;   // tracks are all placed in this folder
@@ -130,6 +130,7 @@ void setup()
   swPause.enableDoublePress(false);
   swPause.enableRepeat(false);
   swPause.enableLongPress(false);
+  
   swNext.begin();
   swNext.enableDoublePress(false);
   swNext.enableRepeat(false);

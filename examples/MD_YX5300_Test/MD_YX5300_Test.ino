@@ -6,8 +6,8 @@
 #include <MD_YX5300.h>
 
 // Connections for serial interface to the YX5300 module
-#define ARDUINO_RX 5  // connect to TX of MP3 Player module
-#define ARDUINO_TX 6  // connect to RX of MP3 Player module
+const uint8_t ARDUINO_RX = 4;    // connect to TX of MP3 Player module
+const uint8_t ARDUINO_TX = 5;    // connect to RX of MP3 Player module
 
 // Define global variables
 MD_YX5300 mp3(ARDUINO_RX, ARDUINO_TX);
