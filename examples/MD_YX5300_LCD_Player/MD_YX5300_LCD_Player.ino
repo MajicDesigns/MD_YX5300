@@ -3,12 +3,12 @@
 // MP3 player has the following functions:
 // - Detects when the SD card has been removed/inserted from the YX5300
 // - Single switch (momentary on type) to change modes:
-//    - Start/pause track playback with single press
-//    - Random/loop/single playback cycle with long press
+//    - Start/pause track playback with simple press
+//    - Random/loop/single playback mode cycle with long press
 // - Rotary encoder with switch to control
 //    - Play next/previous track 
 //    - Volume control 
-// - Hitachi type LCD module (1602) used to display info.
+// - Hitachi type LCD module (1602 LCD display) used to display info.
 //
 // Implemented using synchronous and asynchronous calls.
 // All tracks need to be placed in folder PLAY_FOLDER (defined below).
@@ -18,6 +18,9 @@
 // MD_REncoder can be found at https://github.com/MajicDesigns/MD_REncoder
 // LiquidCrystal_SR can be found at https://bitbucket.org/fmalpartida/new-liquidcrystal/overview
 //
+// NOTE:The LCD display module uses a SR backpack (LiquidCrystal_SR). You may need to change
+// this (and initialization parameters) for your specific type of LCD display. The rest should
+// work as is.
 
 #include <MD_YX5300.h>
 #include <MD_REncoder.h>
@@ -43,10 +46,11 @@ const uint8_t RE_B = 7;          // Rotary encoder B pin
 const uint8_t LCD_CLK = 8;       // LCD backpack CLK pin
 const uint8_t LCD_DAT = 9;       // LCD backpack DAT pin
 
-const uint8_t LCD_COLS = 16;     // lcd number of columns
-const uint8_t LCD_ROWS = 2;      // lcd number of rows
+const uint8_t LCD_COLS = 16;     // LCD number of columns
+const uint8_t LCD_ROWS = 2;      // LCD number of rows
 
-#define DEBUG 0 // enable/disable debug output
+// Enable debug output - set to non-zero value to enable.
+#define DEBUG 0
 
 #ifdef DEBUG
 #define PRINT(s,v)    { Serial.print(F(s)); Serial.print(v); }
@@ -72,8 +76,8 @@ enum encMode_t { E_VOLUME, E_TRACK };
 struct    // contains all the running status information
 {
   bool needUpdate;        // flag for display update required
-  bool initialising;      // loading data from the device
-  bool waiting;           // waiting initialisation response
+  bool initializing;      // loading data from the device
+  bool waiting;           // waiting initialization response
 
   playMode_t playMode;    // playing mode 
   playStatus_t playStatus;// playing status
@@ -83,7 +87,10 @@ struct    // contains all the running status information
   uint16_t volume;        // the current audio volume
 } S;
 
+// ---------------
 // Static data for custom LCD characters, initialized in setup()
+//
+// Character identifiers
 const uint8_t C_STOP = 0;
 const uint8_t C_PLAY = 1;
 const uint8_t C_PAUSE = 2;
@@ -92,12 +99,14 @@ const uint8_t C_LOOP = 4;
 const uint8_t C_SEQ = 5;
 const uint8_t C_EJECT = 6;
 
+// Information structure
 struct lcdData_t
 {
   uint8_t code;
   uint8_t data[8];
 };
 
+// Character data table
 const lcdData_t PROGMEM charDef[] = 
 {
   { C_STOP,    { 0x00, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x00, 0x00 } },
@@ -108,14 +117,15 @@ const lcdData_t PROGMEM charDef[] =
   { C_LOOP,    { 0x1e, 0x01, 0x09, 0x1d, 0x09, 0x09, 0x06, 0x00 } },
   { C_EJECT,   { 0x00, 0x04, 0x0e, 0x1f, 0x00, 0x1f, 0x00, 0x00 } }
 };
+// ---------------
 
 bool initData(bool reset = false)
-// initialise data from the MP3 device. 
-// This needs to be measured out as the data requests will generate 
-// unsolicited messages to be handled in the callback and message 
-// sequence is must be maintained with the synchronous message processing
+// Initialize data from the MP3 device. 
+// This needs to be metered out as the data requests will generate 
+// unsolicited messages to be handled in the callback - message 
+// sequence must be maintained with the synchronous message processing
 // stream.
-// Returns true if the initilisation must keep going, fals when completed.
+// Returns true if the initialization must keep going, false when completed.
 {
   static uint8_t state = 0;
   bool b = true;
@@ -128,7 +138,7 @@ bool initData(bool reset = false)
   {
     switch (state)
     {
-    case 0:   // set a default state in the devioce and then ask for first data
+    case 0:   // set a default state in the device and then ask for first data
       mp3.playSpecific(PLAY_FOLDER, 1);
       mp3.playPause();
       S.playMode = M_SEQ;
@@ -144,14 +154,14 @@ bool initData(bool reset = false)
       state++;
       break;
 
-    case 1: // now load the track cplaying - needs wait for response
+    case 1: // now load the track playing - needs wait for response
       mp3.queryFile();
       S.waiting = true;
       state++;
       break;
 
     default:
-      // end of sequence handler
+      // end of sequence handler - reset to start
       state = 0;
       b = false;
       break;
@@ -163,12 +173,12 @@ bool initData(bool reset = false)
 
 void selectNextSong(int direction = 0)
 // Pick the next song to play based on playing mode set.
-// If direction  < 0 then select a 'previous' song, otherwise the 
-// 'next' song is selected.
+// If direction  < 0 then select a 'previous' song, 
+// otherwise the 'next' song is selected.
 {
   switch (S.playMode)
   {
-  case M_SHUFFLE:
+  case M_SHUFFLE:   // random selection
     {
       uint16_t x = random(S.numTracks) + 1;
       mp3.playTrack(x);
@@ -176,13 +186,16 @@ void selectNextSong(int direction = 0)
     }
     break;
 
-  case M_LOOP:
+  case M_LOOP:      // replay the same track
       mp3.playTrack(S.curTrack);
       PRINTS("\nPlay LOOP");
       break;
 
-  case M_SEQ:
-      if (direction < 0) mp3.playPrev(); else  mp3.playNext();
+  case M_SEQ:       // play sequential - next/previous
+      if (direction < 0) 
+        mp3.playPrev(); 
+      else  
+        mp3.playNext();
       PRINTS("\nPlay SEQ");
       break;
   }
@@ -191,7 +204,7 @@ void selectNextSong(int direction = 0)
 
 void cbResponse(const MD_YX5300::cbData *status)
 // Callback function used to process device unsolicited messages
-// or responses to datya requests
+// or responses to data requests
 {
   PRINTS("\n");
   switch (status->code)
@@ -203,7 +216,7 @@ void cbResponse(const MD_YX5300::cbData *status)
 
   case MD_YX5300::STS_TF_INSERT:  // card has been inserted
     PRINTS("STS_TF_INSERT"); 
-    S.initialising = initData(true);
+    S.initializing = initData(true);
     break;
 
   case MD_YX5300::STS_TF_REMOVE:  // card has been removed
@@ -225,7 +238,7 @@ void cbResponse(const MD_YX5300::cbData *status)
     S.needUpdate = true;
     break;
 
-  // unhandled cases
+  // unhandled cases - used for debug only
   case MD_YX5300::STS_VOLUME:     PRINTS("STS_VOLUME");     break;
   case MD_YX5300::STS_TOT_FILES:  PRINTS("STS_TOT_FILES");  break;
   case MD_YX5300::STS_ERR_FILE:   PRINTS("STS_ERR_FILE");   break;
@@ -243,7 +256,7 @@ void cbResponse(const MD_YX5300::cbData *status)
 
 void processPlayMode(void)
 // Read the mode selection switch and act if it has been pressed
-//  - Start/pause track playback with single press
+//  - Start/pause track playback with simple press
 //  - Random/repeat/single playback cycle with long press
 {
   MD_UISwitch::keyResult_t k = swPlayMode.read();
@@ -424,7 +437,7 @@ void setup(void)
   mp3.begin();
   mp3.setSynchronous(true);
   mp3.setCallback(cbResponse);
-  S.initialising = initData(true);
+  S.initializing = initData(true);
 
   // Set up the switches modes - only simple switching
   swPlayMode.begin();
@@ -454,13 +467,18 @@ void loop()
 {
   mp3.check();        // run the mp3 receiver
 
-  if (S.initialising && !S.waiting)
-    S.initialising = initData();
+  // Initialization must preserve the unsolicited queue order so it 
+  // stops any normal synchronous calls from happening
+  if (S.initializing && !S.waiting)
+    S.initializing = initData();
   else
   {
     processEncoder();   // rotary encoder in current mode
-    processPlayMode();  // set the current play mode
+    processPlayMode();  // set the current play mode (switch selection)
   }
+
+  // Finally update the display if anything changed - this minimises 
+  // the updates to just what is needed for a more readable display
   if (S.needUpdate)
-    displayUpdate();    // finally update the display if anything changed
+    displayUpdate();
 }

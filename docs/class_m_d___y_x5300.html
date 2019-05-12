@@ -331,7 +331,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Class Destructor.</p>
-<p>Released any necessary resources and and does the necessary to clean up once the object is no longer required. </p>
+<p>Release any necessary resources and and does the necessary to clean up once the object is no longer required. </p>
 
 </div>
 </div>
@@ -520,7 +520,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Control repeat play mode (specific folder).</p>
-<p>Set or reset the repeat playing mode for the specified folder. At the end of playing each file the device will send a STS_FILE_END message.</p>
+<p>Set or reset the repeat playing mode for the specified folder. At the end of playing each file the device will send a STS_FILE_END unsolicited message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -548,7 +548,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Control shuffle play mode (specific folder).</p>
-<p>Set or reset the shuffle playing mode for the specified folder. At the end of playing each file the device will send a STS_FILE_END message.</p>
+<p>Set or reset the shuffle playing mode for the specified folder. At the end of playing each file the device will send a STS_FILE_END unsolicited message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -576,7 +576,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Play the next MP3 file.</p>
-<p>Play the next MP3 file in numeric order. At the end of playing the file the device will send a STS_FILE_END message.</p>
+<p>Play the next MP3 file in numeric order. At the end of playing the file the device will send a STS_FILE_END unsolicited message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
@@ -620,7 +620,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Play the previous MP3 file.</p>
-<p>Play the previous MP3 file in numeric order. At the end of playing the file the device will send a STS_FILE_END message.</p>
+<p>Play the previous MP3 file in numeric order. At the end of playing the file the device will send a STS_FILE_END unsolicited message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
@@ -652,7 +652,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Play a specific file in a folder.</p>
-<p>Play a file by specifying the folder and file to be played. At the end of playing the file the device will send a STS_FILE_END message.</p>
+<p>Play a file by specifying the folder and file to be played. At the end of playing the file the device will send a STS_FILE_END unsolicited message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -681,7 +681,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Restart playing the current MP3 file.</p>
-<p>Restart playing playing the current MP3 file after a <a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a>. At the end of playing the file the device will send a STS_FILE_END message.</p>
+<p>Restart playing playing the current MP3 file after a <a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a>. At the end of playing the file the device will send a STS_FILE_END unsolicited message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#af4baeb1fd497b20db518661e24851924">playPause()</a>, <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
@@ -725,7 +725,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Play a specific file.</p>
-<p>Play a file by specifying the file index number. At the end of playing the file the device will send a STS_FILE_END message.</p>
+<p>Play a file by specifying the file index number. At the end of playing the file the device will send a STS_FILE_END unsolicited message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -753,7 +753,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Play repeat specific track.</p>
-<p>Play a track in repeat mode. At the end of playing the file the device will send a STS_FILE_END message.</p>
+<p>Play a track in repeat mode. At the end of playing the file the device will send a STS_FILE_END unsolicited message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -781,13 +781,13 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Query the current equalizer setting.</p>
-<p>Request the current equalizer setting from the device.</p>
+<p>Request the current equalizer setting from the device. The response will be in an unsolicited message following the initial request.</p>
 <ul>
-<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation">cbData.code</a> is STS_??.</li>
+<li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation">cbData.code</a> is STS_?? (unknown).</li>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned">cbData.data</a> is the equalizer setting.</li>
 </ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the request message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
 </div>
@@ -807,13 +807,13 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Query the file currently playing.</p>
-<p>Request the index of the file currently being played.</p>
+<p>Request the index of the file currently being played. The response will be in an unsolicited message following the initial request.</p>
 <ul>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation">cbData.code</a> is STS_PLAYING.</li>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned">cbData.data</a> is the index of the file currently playing.</li>
 </ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the request message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
 </div>
@@ -833,13 +833,13 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Query the total number of files.</p>
-<p>Request the count of files on the TF device.</p>
+<p>Request the count of files on the TF device. The response will be in an unsolicited message following the initial request.</p>
 <ul>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation">cbData.code</a> is STS_TOT_FILES.</li>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned">cbData.data</a> is the count of the files on the file store.</li>
 </ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the request message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
 </div>
@@ -859,13 +859,13 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Query the total number of folders.</p>
-<p>Request the count of folder on the TF device.</p>
+<p>Request the count of folder on the TF device. The response will be in an unsolicited message following the initial request.</p>
 <ul>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation">cbData.code</a> is STS_TOT_FLDR.</li>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned">cbData.data</a> is the count of the folder on the file store, including the root folder.</li>
 </ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the request message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
 </div>
@@ -885,7 +885,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Query the number of files in the specified folder.</p>
-<p>Request the count of files in the specified folder number.</p>
+<p>Request the count of files in the specified folder number. The response will be in an unsolicited message following the initial request.</p>
 <ul>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation">cbData.code</a> is STS_FLDR_FILES.</li>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned">cbData.data</a> is the count of the files in the folder.</li>
@@ -897,7 +897,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the request message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
 </div>
@@ -917,13 +917,13 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Query the current status.</p>
-<p>Request the current status setting from the device.</p>
+<p>Request the current status setting from the device. The response will be in an unsolicited message following the initial request.</p>
 <ul>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation">cbData.code</a> is STS_STATUS.</li>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned">cbData.data</a> high byte is the active file store active (0x02 for TF); low byte 0x00=stopped, 0x01=play, 0x02=paused.</li>
 </ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a457552976582293dfe58b2b76ea31999">volumeQuery()</a>, <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the request message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
 </div>
@@ -943,13 +943,13 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Query the current volume setting.</p>
-<p>Request the current volume setting from the device. This is a wrapper alternative for <a class="el" href="class_m_d___y_x5300.html#a457552976582293dfe58b2b76ea31999">volumeQuery()</a>.</p>
+<p>Request the current volume setting from the device. This is a wrapper alternative for <a class="el" href="class_m_d___y_x5300.html#a457552976582293dfe58b2b76ea31999">volumeQuery()</a>. The response will be in an unsolicited message following the initial request.</p>
 <ul>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#afa9c0e1a63b94754eb79e0b7e9a9d642" title="code for operation">cbData.code</a> is STS_VOLUME.</li>
 <li><a class="el" href="struct_m_d___y_x5300_1_1cb_data.html#a6616e51aabd76202cac53566322fc1cf" title="data returned">cbData.data</a> is the volume setting.</li>
 </ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a457552976582293dfe58b2b76ea31999">volumeQuery()</a>, <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the request message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
 </div>
@@ -969,7 +969,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Control repeat play mode (current file).</p>
-<p>Set or reset the repeat playing mode for the currently playing track. At the end of each repeat play the device will send a STS_FILE_END message.</p>
+<p>Set or reset the repeat playing mode for the currently playing track. At the end of each repeat play the device will send a STS_FILE_END unsolicited message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1104,7 +1104,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Control shuffle playing mode.</p>
-<p>Set or reset the playing mode to/from random shuffle. At the end of playing each file the device will send a STS_FILE_END message.</p>
+<p>Set or reset the playing mode to/from random shuffle. At the end of playing each file the device will send a STS_FILE_END unsolicited message.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1225,7 +1225,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the Maximum possible volume.</p>
+<p>Return the maximum possible volume.</p>
 <p>Return the maximum allowable volume level.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#ad5441e9aa366e073b45b7ae5598f0ef5">volumeInc()</a>, <a class="el" href="class_m_d___y_x5300.html#a6a3d612e047d8cf5b54de81ba60d7c53">volumeDec()</a>, <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The maximum volume level. </dd></dl>
@@ -1276,9 +1276,9 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Query the current volume setting.</p>
-<p>Request the current volume setting from the device. This is a wrapper alternative for <a class="el" href="class_m_d___y_x5300.html#a9661a453395b9932cf6273ce266aabc5">queryVolume()</a>.</p>
+<p>Request the current volume setting from the device. This is a wrapper alternative for <a class="el" href="class_m_d___y_x5300.html#a9661a453395b9932cf6273ce266aabc5">queryVolume()</a>. The response will be in an unsolicited message following the initial request.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_d___y_x5300.html#a9661a453395b9932cf6273ce266aabc5">queryVolume()</a>, <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a>, <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>, <a class="el" href="class_m_d___y_x5300.html#ad69075417b837f014e70ace18395af13">setSynchronous()</a></dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>In synchronous mode, true when the request message has been received and processed. Otherwise ignore the return value and process using callback or <a class="el" href="class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962">check()</a> and <a class="el" href="class_m_d___y_x5300.html#a0eca7a4949bc8ae414634aa8d529c0fa">getStatus()</a>. </dd></dl>
 
 </div>
 </div>
@@ -1314,7 +1314,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_m_d___y_x5300.html">MD_YX5300</a></li>
-    <li class="footer">Generated on Sun Apr 14 2019 11:49:36 for MD_YX5300 Library by
+    <li class="footer">Generated on Sun Apr 21 2019 11:00:57 for MD_YX5300 Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

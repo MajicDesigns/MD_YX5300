@@ -47,14 +47,14 @@ void MD_YX5300::begin(void)
   uint32_t time = _timeout;
 
   _Serial.begin(9600);
-  _timeout = 2000;  // initialisation timeout needs to be a long one
+  _timeout = 2000;  // initialization timeout needs to be a long one
   reset();          // long timeout on this message
   _timeout = time;  // put back saved value
 
   // set the TF card system.
   // The synchronous call will return when the command is accepted
-  // then it will be followed by an initialisation message saying TF card is inserted.
-  // Doc says this should be 200ms, so we set a tmeout for 1000ms.
+  // then it will be followed by an initialization message saying TF card is inserted.
+  // Doc says this should be 200ms, so we set a timeout for 1000ms.
   device(CMD_OPT_DEV_TF); // set the TF card file system
   time = millis();
   while (!check()) 
@@ -179,7 +179,7 @@ void MD_YX5300::processResponse(bool bTimeout)
   int16_t chkRcv = ((int16_t)_bufRx[7] << 8) + _bufRx[8];
 #endif
 
-  // initialise to most probable message outcome
+  // initialize to most probable message outcome
   _status.code = (status_t)_bufRx[3];
   _status.data = ((uint16_t)_bufRx[5] << 8) | _bufRx[6];
 

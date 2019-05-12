@@ -89,15 +89,21 @@ Topics
 
 Known Issues
 ------------
-- equalizer() command is accepted but not actioned by device. Documentation seems to indicate that
-this function may be disabled in the hardware (Chinese translation is ambiguous).
-- playFolderShuffle() command is accepted but not actioned by the device.
-- shuffle() command is accepted but not seem to shuffle files playback.
+- MD_YX5300::equalizer() command is accepted but not actioned by device.
+Documentation seems to indicate that this function may be disabled in the
+hardware (Chinese translation is ambiguous).
+- MD_YX5300::playFolderShuffle() command is accepted but not actioned by the device.
+- MD_YX5300::shuffle() command is accepted but not seem to shuffle files playback.
 
 \page pageDonation Support the Library
 If you like and use this library please consider making a small donation using [PayPal](https://paypal.me/MajicDesigns/4USD)
 
 \page pageOtherLinks Other Useful Links
+ArduinoPlusPlus Blog:
+- About the YX5300https://arduinoplusplus.wordpress.com/2018/07/23/yx5300-serial-mp3-player-catalex-module/
+- Message Flow https://arduinoplusplus.wordpress.com/2019/04/25/yx5300-serial-mp3-player-message-sequencing/
+- Making an MP3 Player https://arduinoplusplus.wordpress.com/2019/xx/xx/yx5300-mp3-player/
+
 The Catalex documentation for their modules:
 - Catalex_YX5300_Docs.zip files (Chinese) http://pan.baidu.com/s/1hqilpB2
 
@@ -115,8 +121,8 @@ Communications Format
 The MP3 module communicates using asynchronous RS232 serial communication at
 9600 bps, 8 data bits, No parity, 1 stop bit, no flow control.
 
-Flow control is implemented using a serial RQST/RESP protocol based on data packets
-with the following byte sequence:
+Flow control is implemented using a serial request/response based on data
+packets with the following byte sequence:
 
 ![YX5300 Packet Structure] (YX5300_Packet_Structure.png)
 
@@ -139,17 +145,18 @@ The checksum is optional in the protocol packet. The library will use the
 checksum field if the C++ macro define USE_CHECKSUM is set to 1 in the header
 file.
 
-Message Flow
-------------
+Message Sequencing
+------------------
 The message flow between the device and MCU can be displayed on the Serial 
 Monitor by the library when the C++ macro define LIBDEBUG is set to 1 in 
 the main code file.
 
-Message are of 2 basic types.
+There are 2 basic type of message flows between the Host and YX5300.
 
-- The first type is a simple message to set or 
-cause an action in the Device. In this case the messages are exchanged as one 
-message/acknowledge pair.
+The first type is a simple message to set a parameter or cause an action.
+In this case the messages are exchanged as one request/response pair,
+shown in the sequence chart below. The request contains the command or
+setting, the response acknowledges the command.
 
 \msc
   Host,YX5300;
@@ -157,7 +164,13 @@ message/acknowledge pair.
   Host<-YX5300 [label=ack];
 \endmsc
  
-- The second type is a message that is requesting information from the YX5300. In this case the simple message flow is followed a short time later by another message from the device containing the requested data.
+The second type is a message that is requesting information from the
+YX5300. In this case the same simple message flow (requesting the data,
+acknowledging the request) is followed a short time later by another message
+from the device containing the requested data which is the in turn
+acknowledged by the Host, as shown in the sequence chart below. This
+second message can effectively be treated as an unsolicited message containing
+information about the device.
 
 \msc
   Host,YX5300;
@@ -170,31 +183,27 @@ message/acknowledge pair.
 
 Sending and Receiving Serial Messages
 -------------------------------------
-This library manages the serial interface to the TX5300 by taking care of
-sending and receiving the serial messages. The MP3 Player responds to 
-command requests but it also sends unsolicited messages when certain events 
-occur (eg, TF card removed or inserted). These unsolicited messages may be 
-important to the application so the library implements mechanisms that 
-allow the application to process the relevant notification data by placing 
-it in a cbData structure. 
+This library manages the serial interface to the TX5300 by taking care
+of the request/response pairs, but the user application needs to
+understand and how to handle unsolicited messages (including response to
+data request). The MP3 Player responds to command requests but it also
+sends unsolicited messages when certain events occur (eg, TF card removed
+or inserted).
 
-How the cbData structure is received by the application is flexible and 
-depends on the setSynchronous() setting and whether a callback is defined. 
-This is summarized in the table below and explained in the text that follows.
+How message are processed by the application is flexible and depends on
+the MD_YX5300::setSynchronous() setting and whether a callback function
+is defined using MD_YX5300::setCallback(). This is explained in the text
+that follows.
 
-|       | Callback           | Polled             |
-|------:|:-------------------|:-------------------|
-| Sync  | _unsol_: callback  | _unsol_: check()   |
-| ^     | _resp_: ret status | _resp_: ret status |
-| Async | _unsol_: callback  | _unsol_: check()   |
-| ^     | _resp_: callback   | _resp_: check()    |
+### Synchronous or Asynchronous
 
-The first choice is whether to process the message in line with the calling
-sequence (synchronous) or separately (asynchronously):
-- __Synchronous__: The command message is sent and the code waits for the 
-response before returning to the calling application. This is relatively
-inefficient of CPU time as it involves a busy wait, but is easy to implement
-in code flow and is good for non-critical applications.
+The first choice in processing messages is whether to process them inline
+with the application sequence (synchronous) or separately (asynchronous).
+
+__Synchronous__: The command message is sent and the code waits for the 
+acknowledgment before returning to the calling application. This is
+relatively inefficient of CPU time as it involves a busy wait, but is
+easy to implement in code flow and works well enough for most applications.
 
 \msc
   Host,Library,YX5300;
@@ -204,11 +213,13 @@ in code flow and is good for non-critical applications.
   Host<<Library [label="method return"];
 \endmsc
 
-- __Asynchronous__: The command message is sent and the library immediately 
+__Asynchronous__: The command message is sent and the library immediately
 returns. The response message is processed as it returns and the calling
-application can continue to run while this happens. Once the response is 
-received, the calling can be notified through a callback or polled status
-(see below).
+application can continue to run while this happens. Once the response is
+received, the application can be notified through a callback or polled
+status (see below). This method gives the calling application priority to
+use the CPU between messages but requires the application to become
+"message flow" aware.
 
 \msc
   Host,Library,YX5300;
@@ -220,13 +231,24 @@ received, the calling can be notified through a callback or polled status
   Host<<=Library [label="status (callback or polled)"];
 \endmsc
 
-Independently of the sync/async mode, the application can choose to be 
-informed received messages are ready to process either by:
-- __Polling__: The return status of the check() method is used as the signal 
-that an unsolicited message has been received. In synchronous mode the return 
-code for the method invoked will be the status of check() for that request.
+### Polled or Callback?
 
-_Synchronous polled return flow_
+Independently of the sync/async mode, the application can choose to be
+informed that received messages are ready to process either by polling
+completion status or using a callback. The relevant notification data
+is placed in a return data structure (MD_YX5300::cbData) for the 
+application to process.
+
+How the message is processed also depends on the synchronous setting, as
+shown in the two variants for the message sequence diagrams in each
+section below.  
+
+__Polled__: The return status of the MD_YX5300::check() method is used
+to signal that an unsolicited message has been received. In polled mode
+a true returned from MD_YX5300::check() is followed by a MD_YX5300::getStatus()
+call to retrieve the relevant MD_YX5300::cbData structure.
+
+_Synchronous polled application and message flow_
 \msc
   Host,Library,YX5300;
   Host=>Library [label="method call"];
@@ -244,7 +266,7 @@ _Synchronous polled return flow_
   Host<<Library [label="cbData structure"];
 \endmsc
 
-_Asynchronous polled return flow_
+_Asynchronous polled application and message flow_
 \msc
   Host,Library,YX5300;
   Host=>Library [label="method call"];
@@ -269,13 +291,17 @@ _Asynchronous polled return flow_
 \endmsc
 
 
-- __Callback__: If a callback function is defined  (see setCallback()), every 
-unsolicited message received will be processed through the callback mechanism.
-In Synchronous mode, both the callback and the return code for the method 
-invoked will signal receipt of the same message, so the application code should
-guard against processing the message twice.
+__Callback__: If a callback function is defined (see
+MD_YX5300::setCallback()), every unsolicited message received
+will be processed through the callback mechanism.
 
-_Synchronous callback return flow_
+In callback mode, the call to MD_YX5300::check() triggers a callback 
+with the relevant MD_YX5300::cbData structure passed to the callback
+function. Additionally, in synchronous mode both the callback and the
+return from MD_YX5300::check() will signal receipt of the same message,
+so the application code should guard against processing the message twice.
+
+_Synchronous callback application and message flow_
 \msc
   Host,Library,YX5300;
   Host=>Library [label="method call"];
@@ -292,7 +318,7 @@ _Synchronous callback return flow_
   Host<<Library [label="check() return true"];
 \endmsc
 
-_Asynchronous callback return flow_
+_Asynchronous callback application and message flow_
 \msc
   Host,Library,YX5300;
   Host=>Library [label="method call"];
@@ -321,7 +347,7 @@ Copyright (C) 2018 Marco Colli. All rights reserved.
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+version 3 of the License, or (at your option) any later version.
 
 This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -329,10 +355,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+License along with this library; if not, a copy is available at 
+https://www.gnu.org/licenses/lgpl-3.0.txt
 
 \page pageRevisionHistory Revision History
+May 2019 version 1.2.2
+- More documentation clarifications
+
 Apr 2019 version 1.2.0, 1.2.1
 - Added Simple player example
 - Added LCD player example
@@ -389,8 +418,9 @@ public:
   * status value of the last device request.
   *
   * Device commands will always receive a STS_ACK_OK if the message was received
-  * correctly. Some commands, notably query requests, will also include a response
-  * with status or information data. These methods are listed below:
+  * correctly. Some commands, notably query requests, will also be followed by an
+  * unsolicited message containing the status or information data. These methods
+  * are listed below:
   *
   * | Method             | Return Status (code) | Return Data (data)                        
   * |:-------------------|:---------------------|:--------------------
@@ -433,7 +463,7 @@ public:
  /**
   * Class Destructor.
   *
-  * Released any necessary resources and and does the necessary to clean up once 
+  * Release any necessary resources and and does the necessary to clean up once 
   * the object is no longer required.
   */
   ~MD_YX5300(void) {};
@@ -633,7 +663,7 @@ public:
   * Control shuffle playing mode.
   *
   * Set or reset the playing mode to/from random shuffle.
-  * At the end of playing each file the device will send a STS_FILE_END message.
+  * At the end of playing each file the device will send a STS_FILE_END unsolicited message.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
@@ -647,7 +677,7 @@ public:
   * Control repeat play mode (current file).
   *
   * Set or reset the repeat playing mode for the currently playing track.
-  * At the end of each repeat play the device will send a STS_FILE_END message.
+  * At the end of each repeat play the device will send a STS_FILE_END unsolicited message.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
@@ -682,7 +712,7 @@ public:
   * Play the next MP3 file.
   * 
   * Play the next MP3 file in numeric order.
-  * At the end of playing the file the device will send a STS_FILE_END message.
+  * At the end of playing the file the device will send a STS_FILE_END unsolicited message.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
@@ -695,7 +725,7 @@ public:
   * Play the previous MP3 file.
   *
   * Play the previous MP3 file in numeric order.
-  * At the end of playing the file the device will send a STS_FILE_END message.
+  * At the end of playing the file the device will send a STS_FILE_END unsolicited message.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
@@ -735,7 +765,7 @@ public:
   * Restart playing the current MP3 file.
   *
   * Restart playing playing the current MP3 file after a playPause().
-  * At the end of playing the file the device will send a STS_FILE_END message.
+  * At the end of playing the file the device will send a STS_FILE_END unsolicited message.
   *
   * \sa playPause(), check(), getStatus(), setSynchronous()
   *
@@ -748,7 +778,7 @@ public:
   * Play a specific file.
   *
   * Play a file by specifying the file index number.
-  * At the end of playing the file the device will send a STS_FILE_END message.
+  * At the end of playing the file the device will send a STS_FILE_END unsolicited message.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
@@ -762,7 +792,7 @@ public:
   * Play repeat specific track.
   *
   * Play a track in repeat mode.
-  * At the end of playing the file the device will send a STS_FILE_END message.
+  * At the end of playing the file the device will send a STS_FILE_END unsolicited message.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
@@ -776,7 +806,7 @@ public:
   * Play a specific file in a folder.
   *
   * Play a file by specifying the folder and file to be played.
-  * At the end of playing the file the device will send a STS_FILE_END message.
+  * At the end of playing the file the device will send a STS_FILE_END unsolicited message.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
@@ -791,7 +821,7 @@ public:
   * Control repeat play mode (specific folder).
   *
   * Set or reset the repeat playing mode for the specified folder.
-  * At the end of playing each file the device will send a STS_FILE_END message.
+  * At the end of playing each file the device will send a STS_FILE_END unsolicited message.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
@@ -805,7 +835,7 @@ public:
   * Control shuffle play mode (specific folder).
   *
   * Set or reset the shuffle playing mode for the specified folder.
-  * At the end of playing each file the device will send a STS_FILE_END message.
+  * At the end of playing each file the device will send a STS_FILE_END unsolicited message.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
@@ -836,7 +866,7 @@ public:
   inline bool volume(uint8_t vol) { return sendRqst(CMD_SET_VOLUME, PKT_DATA_NUL, (vol > volumeMax() ? volumeMax() : vol)); }
 
   /**
-  * Get the Maximum possible volume.
+  * Return the maximum possible volume.
   *
   * Return the maximum allowable volume level.
   *
@@ -890,11 +920,12 @@ public:
   *
   * Request the current volume setting from the device. This is a wrapper alternative 
   * for queryVolume().
+  * The response will be in an unsolicited message following the initial request.
   *
   * \sa queryVolume(), check(), getStatus(), setSynchronous()
   *
-  * \return In synchronous mode, true when the message has been received and processed. Otherwise
-  *         ignore the return value and process using callback or check() and getStatus().
+  * \return In synchronous mode, true when the request message has been received and processed.
+  *         Otherwise ignore the return value and process using callback or check() and getStatus().
   */
   inline bool volumeQuery(void) { return sendRqst(CMD_QUERY_VOLUME, PKT_DATA_NUL, PKT_DATA_NUL); }
 
@@ -908,6 +939,7 @@ public:
   * Query the current status.
   *
   * Request the current status setting from the device.
+  * The response will be in an unsolicited message following the initial request.
   *
   * - cbData.code is STS_STATUS.
   * - cbData.data high byte is the active file store active (0x02 for TF); 
@@ -915,8 +947,8 @@ public:
   *
   * \sa volumeQuery(), check(), getStatus(), setSynchronous()
   *
-  * \return In synchronous mode, true when the message has been received and processed. Otherwise
-  *         ignore the return value and process using callback or check() and getStatus().
+  * \return In synchronous mode, true when the request message has been received and processed.
+  *         Otherwise ignore the return value and process using callback or check() and getStatus().
   */
   inline bool queryStatus(void) { return sendRqst(CMD_QUERY_STATUS, PKT_DATA_NUL, PKT_DATA_NUL); }
 
@@ -925,14 +957,15 @@ public:
   *
   * Request the current volume setting from the device. This is a wrapper alternative
   * for volumeQuery().
+  * The response will be in an unsolicited message following the initial request.
   *
   * - cbData.code is STS_VOLUME.
   * - cbData.data is the volume setting.
   *
   * \sa volumeQuery(), check(), getStatus(), setSynchronous()
   *
-  * \return In synchronous mode, true when the message has been received and processed. Otherwise
-  *         ignore the return value and process using callback or check() and getStatus().
+  * \return In synchronous mode, true when the request message has been received and processed.
+  *         Otherwise ignore the return value and process using callback or check() and getStatus().
   */
   inline bool queryVolume(void) { return volumeQuery(); }
 
@@ -940,14 +973,15 @@ public:
   * Query the current equalizer setting.
   *
   * Request the current equalizer setting from the device.
+  * The response will be in an unsolicited message following the initial request.
   *
-  * - cbData.code is STS_??.
+  * - cbData.code is STS_?? (unknown).
   * - cbData.data is the equalizer setting.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
-  * \return In synchronous mode, true when the message has been received and processed. Otherwise
-  *         ignore the return value and process using callback or check() and getStatus().
+  * \return In synchronous mode, true when the request message has been received and processed.
+  *         Otherwise ignore the return value and process using callback or check() and getStatus().
   */
   inline bool queryEqualizer(void) { return sendRqst(CMD_QUERY_EQUALIZER, PKT_DATA_NUL, PKT_DATA_NUL); }
 
@@ -955,6 +989,7 @@ public:
   * Query the number of files in the specified folder.
   *
   * Request the count of files in the specified folder number.
+  * The response will be in an unsolicited message following the initial request.
   *
   * - cbData.code is STS_FLDR_FILES.
   * - cbData.data is the count of the files in the folder.
@@ -962,8 +997,8 @@ public:
   * \sa check(), getStatus(), setSynchronous()
   *
   * \param folder the folder number whose files are to be counted.
-  * \return In synchronous mode, true when the message has been received and processed. Otherwise
-  *         ignore the return value and process using callback or check() and getStatus().
+  * \return In synchronous mode, true when the request message has been received and processed.
+  *         Otherwise ignore the return value and process using callback or check() and getStatus().
   */
   inline bool queryFolderFiles(uint8_t folder) { return sendRqst(CMD_QUERY_FLDR_FILES, PKT_DATA_NUL, folder); }
 
@@ -971,6 +1006,7 @@ public:
   * Query the total number of folders.
   *
   * Request the count of folder on the TF device.
+  * The response will be in an unsolicited message following the initial request.
   *
   * - cbData.code is STS_TOT_FLDR.
   * - cbData.data is the count of the folder on the file store, including
@@ -978,8 +1014,8 @@ public:
   *
   * \sa check(), getStatus(), setSynchronous()
   *
-  * \return In synchronous mode, true when the message has been received and processed. Otherwise
-  *         ignore the return value and process using callback or check() and getStatus().
+  * \return In synchronous mode, true when the request message has been received and processed.
+  *         Otherwise ignore the return value and process using callback or check() and getStatus().
   */
   inline bool queryFolderCount(void) { return sendRqst(CMD_QUERY_TOT_FLDR, PKT_DATA_NUL, PKT_DATA_NUL); }
 
@@ -987,14 +1023,15 @@ public:
   * Query the total number of files.
   *
   * Request the count of files on the TF device.
+  * The response will be in an unsolicited message following the initial request.
   *
   * - cbData.code is STS_TOT_FILES.
   * - cbData.data is the count of the files on the file store.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
-  * \return In synchronous mode, true when the message has been received and processed. Otherwise
-  *         ignore the return value and process using callback or check() and getStatus().
+  * \return In synchronous mode, true when the request message has been received and processed.
+  *         Otherwise ignore the return value and process using callback or check() and getStatus().
   */
   inline bool queryFilesCount(void) { return sendRqst(CMD_QUERY_TOT_FILES, PKT_DATA_NUL, PKT_DATA_NUL); }
 
@@ -1002,14 +1039,15 @@ public:
   * Query the file currently playing.
   *
   * Request the index of the file currently being played.
+  * The response will be in an unsolicited message following the initial request.
   *
   * - cbData.code is STS_PLAYING.
   * - cbData.data is the index of the file currently playing.
   *
   * \sa check(), getStatus(), setSynchronous()
   *
-  * \return In synchronous mode, true when the message has been received and processed. Otherwise
-  *         ignore the return value and process using callback or check() and getStatus().
+  * \return In synchronous mode, true when the request message has been received and processed.
+  *         Otherwise ignore the return value and process using callback or check() and getStatus().
   */
   inline bool queryFile(void) { return sendRqst(CMD_QUERY_PLAYING, PKT_DATA_NUL, PKT_DATA_NUL); }
 
