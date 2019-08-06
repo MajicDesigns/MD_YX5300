@@ -1,15 +1,17 @@
-#ifndef MD_YX5300_H
-#define MD_YX5300_H
-
-
-#define USE_SOFTWARESERIAL  1   ///< Set to 1 to use SoftwareSerial library, 0 for native serial port
-#define USE_CHECKSUM        1   ///< Set to 1 to enable checksums in messages, 0 to disable
-
+#pragma once
 #include <Arduino.h>
+
+#ifndef SOFTWARESERIAL
+#define USE_SOFTWARESERIAL 1   ///< Set to 1 to use SoftwareSerial library, 0 for native serial port
+#endif
+#ifndef USE_CHECKSUM
+#define USE_CHECKSUM       1   ///< Set to 1 to enable checksums in messages, 0 to disable
+#endif
+
 #if USE_SOFTWARESERIAL
 #include <SoftwareSerial.h>
 #else
-#define _S Serial2      ///< Native serial port - can be changed to suit
+#define _Serial Serial2      ///< Native serial port - can be changed to suit
 #endif
 
 /**
@@ -1131,5 +1133,3 @@ private:
   void dumpMessage(uint8_t *msg, uint8_t len, char *psz);     ///< Dump a message to the debug stream
   char itoh(uint8_t i);                                       ///< Integer to Hex string
 };
-
-#endif
