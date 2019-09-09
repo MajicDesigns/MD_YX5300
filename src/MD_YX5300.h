@@ -361,6 +361,9 @@ License along with this library; if not, a copy is available at
 https://www.gnu.org/licenses/lgpl-3.0.txt
 
 \page pageRevisionHistory Revision History
+Sep 2019 version 1.2.3
+- Fixed Serial #define issue
+
 May 2019 version 1.2.2
 - More documentation clarifications
 
