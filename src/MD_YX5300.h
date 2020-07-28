@@ -361,6 +361,9 @@ License along with this library; if not, a copy is available at
 https://www.gnu.org/licenses/lgpl-3.0.txt
 
 \page pageRevisionHistory Revision History
+Jul 2020 version 1.2.4
+- Fixed ESP32 compiler tantrums
+
 Sep 2019 version 1.2.3
 - Fixed Serial #define issue
 
