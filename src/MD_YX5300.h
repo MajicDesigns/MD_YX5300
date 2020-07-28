@@ -462,7 +462,7 @@ public:
 #if USE_SOFTWARESERIAL
     _Serial(pinRx, pinTx),
 #endif
-  _timeout(1000), _synch(true), _cbStatus(nullptr)
+  _cbStatus(nullptr), _synch(true), _timeout(1000)
     {};
 
  /**

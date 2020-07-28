@@ -1,4 +1,6 @@
-# Arduino Serial MP3 Player Library
+# Arduino YX5300 Serial MP3 Player Library
+
+[![arduino-library-badge](https://www.ardu-badge.com/badge/MD_YX5300.svg?)](https://www.ardu-badge.com/MD_YX5300)
 
 This library implements functions to control RS232 Serial MP3 players based 
 on the YX5300 IC. These are often sold as "Catalex" Serial MP3 players.
