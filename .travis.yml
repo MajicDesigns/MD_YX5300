@@ -36,6 +36,9 @@ env:
 install:
   - pip install -U platformio pip setuptools
   - platformio update
+  # https://platformio.org/lib/show/168/EspSoftwareSerial
+  - platformio lib -g install 168
+
 
 script:
   - platformio ci --lib="." --board=uno --board=esp-wrover-kit
