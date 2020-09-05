@@ -33,9 +33,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 #define LIBDEBUG  0   ///< Set to 1 to enable Debug statement in the library
 
 #if LIBDEBUG
-#define PRINT(s, v)   { Serial.print(F(s)); Serial.print(v); }      ///< Print a string followed by a value (decimal)
-#define PRINTX(s, v)  { Serial.print(F(s)); Serial.print(v, HEX); } ///< Print a string followed by a value (hex)
-#define PRINTS(s)     { Serial.print(F(s)); }                       ///< Print a string
+#define DBGStream Serial
+
+#define PRINT(s, v)   { DBGStream.print(F(s)); DBGStream.print(v); }      ///< Print a string followed by a value (decimal)
+#define PRINTX(s, v)  { DBGStream.print(F(s)); DBGStream.print(v, HEX); } ///< Print a string followed by a value (hex)
+#define PRINTS(s)     { DBGStream.print(F(s)); }                          ///< Print a string
 #else
 #define PRINT(s, v)   ///< Print a string followed by a value (decimal)
 #define PRINTX(s, v)  ///< Print a string followed by a value (hex)
@@ -46,7 +48,6 @@ void MD_YX5300::begin(void)
 {
   uint32_t time = _timeout;
 
-  _Serial.begin(9600);
   _timeout = 2000;  // initialization timeout needs to be a long one
   reset();          // long timeout on this message
   _timeout = time;  // put back saved value
@@ -76,13 +77,13 @@ bool MD_YX5300::check(void)
   }
 
   // check if any characters available
-  if (!_Serial.available())
+  if (!_S.available())
     return(false);
 
   // process all the characters waiting
   do
   {
-    c = _Serial.read();
+    c = _S.read();
  
     if (c == PKT_SOM) _bufIdx = 0;      // start of message - reset the index
     
@@ -90,7 +91,7 @@ bool MD_YX5300::check(void)
 
     if (_bufIdx >= ARRAY_SIZE(_bufRx))  // keep index within array memory bounds
       _bufIdx = ARRAY_SIZE(_bufRx) - 1;
-  } while (_Serial.available() && c != PKT_EOM);
+  } while (_S.available() && c != PKT_EOM);
 
   // check if we have a whole message to 
   // process and do something with it here!
@@ -142,7 +143,7 @@ bool MD_YX5300::sendRqst(cmdSet_t cmd, uint8_t data1, uint8_t data2)
   msg[8] = (uint8_t)(chk & 0x00ff);
 #endif
 
-  _Serial.write(msg, ARRAY_SIZE(msg));
+  _S.write(msg, ARRAY_SIZE(msg));
 
 #if LIBDEBUG
   dumpMessage(msg, ARRAY_SIZE(msg), "S");
@@ -234,7 +235,7 @@ char MD_YX5300::itoh(uint8_t i)
 
 void MD_YX5300::dumpMessage(uint8_t *msg, uint8_t len, char *psz)
 {
-  char sz[3] = "00";
+  char sz[3];
   uint32_t maxMillis = 1000000L;
   uint32_t time = millis();
 
@@ -249,6 +250,7 @@ void MD_YX5300::dumpMessage(uint8_t *msg, uint8_t len, char *psz)
 
   // now the rest of dump message
   PRINT(" ", psz); PRINTS(": ");
+  sz[2] = '\0';
   for (uint8_t i=0; i<len; i++, msg++)
   {
     sz[0] = itoh((*msg & 0xf0) >> 4);

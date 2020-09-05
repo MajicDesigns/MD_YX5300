@@ -20,7 +20,7 @@ var class_m_d___y_x5300 =
       [ "STS_FLDR_FILES", "class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512bab8aa303a7afdbb7aa6e9914969143504", null ],
       [ "STS_TOT_FLDR", "class_m_d___y_x5300.html#aea3c10a359e2e1e317685f969533512ba07fd10675a659729ce2a7479593c98f4", null ]
     ] ],
-    [ "MD_YX5300", "class_m_d___y_x5300.html#aaa0f78c6cb1c17a4a8198342aaa3ab19", null ],
+    [ "MD_YX5300", "class_m_d___y_x5300.html#af12ca7fa444c93753febe2b6462ce180", null ],
     [ "~MD_YX5300", "class_m_d___y_x5300.html#af77302751745900b005c8d431d408865", null ],
     [ "begin", "class_m_d___y_x5300.html#a83ad6e9fe7a43d30db4c13e071659a85", null ],
     [ "check", "class_m_d___y_x5300.html#a0302a79afd5a3745b539aae808755962", null ],
@@ -59,5 +59,6 @@ var class_m_d___y_x5300 =
     [ "volumeMax", "class_m_d___y_x5300.html#ac9884f641faa6d985cc76ad53a1d27a8", null ],
     [ "volumeMute", "class_m_d___y_x5300.html#acbb05d9628a9a06bd1131f6c6f37c4e9", null ],
     [ "volumeQuery", "class_m_d___y_x5300.html#a457552976582293dfe58b2b76ea31999", null ],
-    [ "wakeUp", "class_m_d___y_x5300.html#ac95da482fb1e64997aa8b7dcb76dd985", null ]
+    [ "wakeUp", "class_m_d___y_x5300.html#ac95da482fb1e64997aa8b7dcb76dd985", null ],
+    [ "SERIAL_BPS", "class_m_d___y_x5300.html#aed0df46b07b2bf699c0bee9f31497c71", null ]
 ];

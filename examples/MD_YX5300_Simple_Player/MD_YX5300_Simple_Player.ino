@@ -13,27 +13,40 @@
 // MD_UISwitch can be found at https://github.com/MajicDesigns/MD_UISwitch
 //
 
+#ifndef USE_SOFTWARESERIAL
+#define USE_SOFTWARESERIAL 1   ///< Set to 1 to use SoftwareSerial library, 0 for native serial port
+#endif
+
 #include <MD_YX5300.h>
 #include <MD_UISwitch.h>
+
+#if USE_SOFTWARESERIAL
+#include <SoftwareSerial.h>
 
 // Connections for serial interface to the YX5300 module
 const uint8_t ARDUINO_RX = 4;    // connect to TX of MP3 Player module
 const uint8_t ARDUINO_TX = 5;    // connect to RX of MP3 Player module
 
-const uint8_t PIN_SWITCH = 2;    // play/pause toggle digital pin, active low (PULLUP)
-const uint8_t PIN_LED = 3;       // LED to show status
+SoftwareSerial  MP3Stream(ARDUINO_RX, ARDUINO_TX);  // MP3 player serial stream for comms
+#define Console Serial           // command processor input/output stream
+#else
+#define MP3Stream Serial2  // Native serial port - change to suit the application
+#define Console   Serial   // command processor input/output stream
+#endif
+
+const uint8_t PIN_SWITCH = 6;    // play/pause toggle digital pin, active low (PULLUP)
+const uint8_t PIN_LED = 7;       // LED to show status
 const uint8_t POT_VOLUME = A0;   // volume control pot analog pin
 
 const uint8_t PLAY_FOLDER = 1;   // tracks are all placed in this folder
-
 
 // Debug switch for debugging output - set to non-zero to enable
 #define DEBUG 0
 
 #ifdef DEBUG
-#define PRINT(s,v)    { Serial.print(F(s)); Serial.print(v); }
-#define PRINTX(s,v)   { Serial.print(F(s)); Serial.print(v, HEX); }
-#define PRINTS(s)     { Serial.print(F(s)); }
+#define PRINT(s,v)    { Console.print(F(s)); Console.print(v); }
+#define PRINTX(s,v)   { Console.print(F(s)); Console.print(v, HEX); }
+#define PRINTS(s)     { Console.print(F(s)); }
 #else
 #define PRINT(s,v)
 #define PRINTX(s,v)
@@ -41,7 +54,7 @@ const uint8_t PLAY_FOLDER = 1;   // tracks are all placed in this folder
 #endif
 
 // Define global variables
-MD_YX5300 mp3(ARDUINO_RX, ARDUINO_TX);
+MD_YX5300 mp3(MP3Stream);
 MD_UISwitch_Digital sw(PIN_SWITCH);
 bool playerPause = true;  // true if player is currently paused
 
@@ -98,7 +111,7 @@ void setStatusLED(void)
 void setup()
 {
 #if DEBUG
-  Serial.begin(57600);
+  Console.begin(57600);
 #endif
   PRINTS("\n[MD_YX5300 Simple Player]");
 
@@ -107,6 +120,7 @@ void setup()
   pinMode(POT_VOLUME, INPUT);
 
   // initialize global libraries
+  MP3Stream.begin(MD_YX5300::SERIAL_BPS);
   mp3.begin();
   mp3.setSynchronous(true);
   mp3.playFolderRepeat(PLAY_FOLDER);

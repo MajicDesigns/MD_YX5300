@@ -3,14 +3,28 @@
 // Menu driven interface using the Serial Monitor to test individual functions.
 //
 
+#ifndef SOFTWARESERIAL
+#define USE_SOFTWARESERIAL 1   ///< Set to 1 to use SoftwareSerial library, 0 for native serial port
+#endif
+
 #include <MD_YX5300.h>
+
+#if USE_SOFTWARESERIAL
+#include <SoftwareSerial.h>
 
 // Connections for serial interface to the YX5300 module
 const uint8_t ARDUINO_RX = 4;    // connect to TX of MP3 Player module
 const uint8_t ARDUINO_TX = 5;    // connect to RX of MP3 Player module
 
-// Define global variables
-MD_YX5300 mp3(ARDUINO_RX, ARDUINO_TX);
+SoftwareSerial  MP3Stream(ARDUINO_RX, ARDUINO_TX);  // MP3 player serial stream for comms
+#define Console Serial           // command processor input/output stream
+#else
+#define MP3Stream Serial2  // Native serial port - change to suit the application
+#define Console   Serial   // command processor input/output stream
+#endif
+
+// Define YX5300 global variables
+MD_YX5300 mp3(MP3Stream);
 bool bUseCallback = true; // use callbacks?
 bool bUseSynch = false;   // use synchronous? 
 
@@ -19,49 +33,49 @@ void cbResponse(const MD_YX5300::cbData *status)
 // or called locally when not in callback mode.
 {
   if (bUseSynch)
-    Serial.print(F("\nSync Status: "));
+    Console.print(F("\nSync Status: "));
   else
-    Serial.print(F("\nCback status: "));
+    Console.print(F("\nCback status: "));
 
   switch (status->code)
   {
-  case MD_YX5300::STS_OK:         Serial.print(F("STS_OK"));         break;
-  case MD_YX5300::STS_TIMEOUT:    Serial.print(F("STS_TIMEOUT"));    break;
-  case MD_YX5300::STS_VERSION:    Serial.print(F("STS_VERSION"));    break;
-  case MD_YX5300::STS_CHECKSUM:   Serial.print(F("STS_CHECKSUM"));    break;
-  case MD_YX5300::STS_TF_INSERT:  Serial.print(F("STS_TF_INSERT"));  break;
-  case MD_YX5300::STS_TF_REMOVE:  Serial.print(F("STS_TF_REMOVE"));  break;
-  case MD_YX5300::STS_ERR_FILE:   Serial.print(F("STS_ERR_FILE"));   break;
-  case MD_YX5300::STS_ACK_OK:     Serial.print(F("STS_ACK_OK"));     break;
-  case MD_YX5300::STS_FILE_END:   Serial.print(F("STS_FILE_END"));   break;
-  case MD_YX5300::STS_INIT:       Serial.print(F("STS_INIT"));       break;
-  case MD_YX5300::STS_STATUS:     Serial.print(F("STS_STATUS"));     break;
-  case MD_YX5300::STS_EQUALIZER:  Serial.print(F("STS_EQUALIZER"));  break;
-  case MD_YX5300::STS_VOLUME:     Serial.print(F("STS_VOLUME"));     break;
-  case MD_YX5300::STS_TOT_FILES:  Serial.print(F("STS_TOT_FILES"));  break;
-  case MD_YX5300::STS_PLAYING:    Serial.print(F("STS_PLAYING"));    break;
-  case MD_YX5300::STS_FLDR_FILES: Serial.print(F("STS_FLDR_FILES")); break;
-  case MD_YX5300::STS_TOT_FLDR:   Serial.print(F("STS_TOT_FLDR"));   break;
-  default: Serial.print(F("STS_??? 0x")); Serial.print(status->code, HEX); break;
+  case MD_YX5300::STS_OK:         Console.print(F("STS_OK"));         break;
+  case MD_YX5300::STS_TIMEOUT:    Console.print(F("STS_TIMEOUT"));    break;
+  case MD_YX5300::STS_VERSION:    Console.print(F("STS_VERSION"));    break;
+  case MD_YX5300::STS_CHECKSUM:   Console.print(F("STS_CHECKSUM"));    break;
+  case MD_YX5300::STS_TF_INSERT:  Console.print(F("STS_TF_INSERT"));  break;
+  case MD_YX5300::STS_TF_REMOVE:  Console.print(F("STS_TF_REMOVE"));  break;
+  case MD_YX5300::STS_ERR_FILE:   Console.print(F("STS_ERR_FILE"));   break;
+  case MD_YX5300::STS_ACK_OK:     Console.print(F("STS_ACK_OK"));     break;
+  case MD_YX5300::STS_FILE_END:   Console.print(F("STS_FILE_END"));   break;
+  case MD_YX5300::STS_INIT:       Console.print(F("STS_INIT"));       break;
+  case MD_YX5300::STS_STATUS:     Console.print(F("STS_STATUS"));     break;
+  case MD_YX5300::STS_EQUALIZER:  Console.print(F("STS_EQUALIZER"));  break;
+  case MD_YX5300::STS_VOLUME:     Console.print(F("STS_VOLUME"));     break;
+  case MD_YX5300::STS_TOT_FILES:  Console.print(F("STS_TOT_FILES"));  break;
+  case MD_YX5300::STS_PLAYING:    Console.print(F("STS_PLAYING"));    break;
+  case MD_YX5300::STS_FLDR_FILES: Console.print(F("STS_FLDR_FILES")); break;
+  case MD_YX5300::STS_TOT_FLDR:   Console.print(F("STS_TOT_FLDR"));   break;
+  default: Console.print(F("STS_??? 0x")); Console.print(status->code, HEX); break;
   }
 
-  Serial.print(F(", 0x"));
-  Serial.print(status->data, HEX);
+  Console.print(F(", 0x"));
+  Console.print(status->data, HEX);
 }
 
 void setCallbackMode(bool b)
 {
   bUseCallback = b;
-  Serial.print(F("\n>Callback "));
-  Serial.print(b ? F("ON") : F("OFF"));
+  Console.print(F("\n>Callback "));
+  Console.print(b ? F("ON") : F("OFF"));
   mp3.setCallback(b ? cbResponse : nullptr);
 }
 
 void setSynchMode(bool b)
 {
   bUseSynch = b;
-  Serial.print(F("\n>Synchronous "));
-  Serial.print(b ? F("ON") : F("OFF"));
+  Console.print(F("\n>Synchronous "));
+  Console.print(b ? F("ON") : F("OFF"));
   mp3.setSynchronous(b);
 }
 
@@ -69,12 +83,12 @@ char getNextChar(bool block = false)
 {
   char c = '\0';
 
-  if (!block) return(Serial.available() ? Serial.read() : c);
+  if (!block) return(Console.available() ? Console.read() : c);
 
   while (c == '\0')
   {
-    if (Serial.available())
-      c = Serial.read();
+    if (Console.available())
+      c = Console.read();
   }
 
   return(c);
@@ -100,38 +114,38 @@ uint16_t getNum(char c, uint8_t dig)
 
 void help(void)
 {
-  Serial.print(F("\n[MD_YX5300 Test Menu]"));
-  Serial.print(F("\nh,?\thelp"));
-  Serial.print(F("\n\np!\tPlay"));
-  Serial.print(F("\npyyy\tPlay file index yyy (0-255)"));
-  Serial.print(F("\npp\tPlay Pause"));
-  Serial.print(F("\npz\tPlay Stop"));
-  Serial.print(F("\np>\tPlay Next"));
-  Serial.print(F("\np<\tPlay Previous"));
-  Serial.print(F("\nptxxyyy\tPlay Track folder xx, file yyy"));
-  Serial.print(F("\npfxx\tPlay loop folder xx"));
-  Serial.print(F("\npxaa\tPlay shuffle folder aa"));
-  Serial.print(F("\npryyy\tPlay loop file index yyy"));
-  Serial.print(F("\n\nv+\tVolume up"));
-  Serial.print(F("\nv-\tVolume down"));
-  Serial.print(F("\nvxx\tVolume set xx (max 30)"));
-  Serial.print(F("\nvb\tVolume Mute on (b=1), off (b=0)"));
-  Serial.print(F("\n\nqe\tQuery equalizer"));
-  Serial.print(F("\nqf\tQuery current file"));
-  Serial.print(F("\nqs\tQuery status"));
-  Serial.print(F("\nqv\tQuery volume"));
-  Serial.print(F("\nqx\tQuery folder count"));
-  Serial.print(F("\nqy\tQuery total file count"));
-  Serial.print(F("\nqzxx\tQuery files count in folder xx"));
-  Serial.print(F("\n\ns\tSleep"));
-  Serial.print(F("\nw\tWake up"));
-  Serial.print(F("\nen\tEqualizer type n"));
-  Serial.print(F("\nxb\tPlay Shuffle on (b=1), off (b=0)"));
-  Serial.print(F("\nrb\tPlay Repeat on (b=1), off (b=0)"));
-  Serial.print(F("\nz\tReset"));
-  Serial.print(F("\nyb\tSynchronous mode on (b=1), off (b=0)"));
-  Serial.print(F("\ncb\tCallback mode on (b=1), off (b=0)"));
-  Serial.print(F("\n\n"));
+  Console.print(F("\n[MD_YX5300 Test Menu]"));
+  Console.print(F("\nh,?\thelp"));
+  Console.print(F("\n\np!\tPlay"));
+  Console.print(F("\npyyy\tPlay file index yyy (0-255)"));
+  Console.print(F("\npp\tPlay Pause"));
+  Console.print(F("\npz\tPlay Stop"));
+  Console.print(F("\np>\tPlay Next"));
+  Console.print(F("\np<\tPlay Previous"));
+  Console.print(F("\nptxxyyy\tPlay Track folder xx, file yyy"));
+  Console.print(F("\npfxx\tPlay loop folder xx"));
+  Console.print(F("\npxaa\tPlay shuffle folder aa"));
+  Console.print(F("\npryyy\tPlay loop file index yyy"));
+  Console.print(F("\n\nv+\tVolume up"));
+  Console.print(F("\nv-\tVolume down"));
+  Console.print(F("\nvxx\tVolume set xx (max 30)"));
+  Console.print(F("\nvb\tVolume Mute on (b=1), off (b=0)"));
+  Console.print(F("\n\nqe\tQuery equalizer"));
+  Console.print(F("\nqf\tQuery current file"));
+  Console.print(F("\nqs\tQuery status"));
+  Console.print(F("\nqv\tQuery volume"));
+  Console.print(F("\nqx\tQuery folder count"));
+  Console.print(F("\nqy\tQuery total file count"));
+  Console.print(F("\nqzxx\tQuery files count in folder xx"));
+  Console.print(F("\n\ns\tSleep"));
+  Console.print(F("\nw\tWake up"));
+  Console.print(F("\nen\tEqualizer type n"));
+  Console.print(F("\nxb\tPlay Shuffle on (b=1), off (b=0)"));
+  Console.print(F("\nrb\tPlay Repeat on (b=1), off (b=0)"));
+  Console.print(F("\nz\tReset"));
+  Console.print(F("\nyb\tSynchronous mode on (b=1), off (b=0)"));
+  Console.print(F("\ncb\tCallback mode on (b=1), off (b=0)"));
+  Console.print(F("\n\n"));
 }
 
 bool processPlay(void)
@@ -141,16 +155,16 @@ bool processPlay(void)
 
   switch (toupper(c))
   {
-    case '!': Serial.print(F("\n> Play Start")); return(mp3.playStart());
-    case 'P': Serial.print(F("\n>Play Pause")); return(mp3.playPause());
-    case 'Z': Serial.print(F("\n>Play Stop")); return(mp3.playStop());
-    case '>': Serial.print(F("\n>Play Next")); return(mp3.playNext());
-    case '<': Serial.print(F("\n>Play Prev")); return(mp3.playPrev());
+    case '!': Console.print(F("\n> Play Start")); return(mp3.playStart());
+    case 'P': Console.print(F("\n>Play Pause")); return(mp3.playPause());
+    case 'Z': Console.print(F("\n>Play Stop")); return(mp3.playStop());
+    case '>': Console.print(F("\n>Play Next")); return(mp3.playNext());
+    case '<': Console.print(F("\n>Play Prev")); return(mp3.playPrev());
     case '0'...'9':
       {
         uint8_t t = getNum(c, 3);
-        Serial.print(F("\n>Play Track "));
-        Serial.print(t);
+        Console.print(F("\n>Play Track "));
+        Console.print(t);
         return(mp3.playTrack(t));
       }
 
@@ -158,38 +172,38 @@ bool processPlay(void)
       {
         uint8_t fldr = getNum('\0', 2);
         uint8_t file = getNum('\0', 3);
-        Serial.print(F("\n>Play Specific Fldr "));
-        Serial.print(fldr);
-        Serial.print(F(", "));
-        Serial.print(file);
+        Console.print(F("\n>Play Specific Fldr "));
+        Console.print(fldr);
+        Console.print(F(", "));
+        Console.print(file);
         return(mp3.playSpecific(fldr, file));
       }
 
     case 'F':
       {
         uint8_t fldr = getNum('\0', 2);
-        Serial.print(F("\n>Play Folder "));
-        Serial.print(fldr);
+        Console.print(F("\n>Play Folder "));
+        Console.print(fldr);
         return(mp3.playFolderRepeat(fldr));
       }
 
     case 'X':
     {
       uint8_t fldr = getNum('\0', 2);
-      Serial.print(F("\n>Play Shuffle Folder "));
-      Serial.print(fldr);
+      Console.print(F("\n>Play Shuffle Folder "));
+      Console.print(fldr);
       return(mp3.playFolderShuffle(fldr));
     }
 
     case 'R':
     {
       uint8_t file = getNum('\0', 3);
-      Serial.print(F("\n>Play File repeat "));
-      Serial.print(file);
+      Console.print(F("\n>Play File repeat "));
+      Console.print(file);
       return(mp3.playTrackRepeat(file));
     }
 
-    default: Serial.print(F("\n>Play ?")); Serial.print(c); break;
+    default: Console.print(F("\n>Play ?")); Console.print(c); break;
   }
 
   return(false);
@@ -202,21 +216,21 @@ bool processVolume(void)
 
   switch (toupper(c))
   {
-  case '+': Serial.print(F("\n>Volume Up"));  return(mp3.volumeInc());
-  case '-': Serial.print(F("\n>Volume Down"));  return(mp3.volumeDec());
+  case '+': Console.print(F("\n>Volume Up"));  return(mp3.volumeInc());
+  case '-': Console.print(F("\n>Volume Down"));  return(mp3.volumeDec());
   case 'M':
     {
       uint8_t cmd = getNum('\0', 1);
-      Serial.print(F("\n>Volume Enable "));
-      Serial.print(cmd);
+      Console.print(F("\n>Volume Enable "));
+      Console.print(cmd);
       return(mp3.volumeMute(cmd != 0));
     }
 
   default:
     {
       uint16_t v = getNum(c, 2);
-      Serial.print(F("\n>Volume ")); 
-      Serial.print(v);
+      Console.print(F("\n>Volume ")); 
+      Console.print(v);
       return(mp3.volume(v)); 
     }
   }
@@ -231,21 +245,21 @@ bool processQuery(void)
 
   switch (toupper(c))
   {
-  case 'E': Serial.print(F("\n>Query Equalizer"));  return(mp3.queryEqualizer());
-  case 'F': Serial.print(F("\n>Query File"));       return(mp3.queryFile());
-  case 'S': Serial.print(F("\n>Query Status"));     return(mp3.queryStatus());
-  case 'V': Serial.print(F("\n>Query Volume"));     return(mp3.queryVolume());
-  case 'X': Serial.print(F("\n>Query Folder Count"));  return(mp3.queryFolderCount());
-  case 'Y': Serial.print(F("\n>Query Tracks Count"));  return(mp3.queryFilesCount());
+  case 'E': Console.print(F("\n>Query Equalizer"));  return(mp3.queryEqualizer());
+  case 'F': Console.print(F("\n>Query File"));       return(mp3.queryFile());
+  case 'S': Console.print(F("\n>Query Status"));     return(mp3.queryStatus());
+  case 'V': Console.print(F("\n>Query Volume"));     return(mp3.queryVolume());
+  case 'X': Console.print(F("\n>Query Folder Count"));  return(mp3.queryFolderCount());
+  case 'Y': Console.print(F("\n>Query Tracks Count"));  return(mp3.queryFilesCount());
   case 'Z': 
     {
       uint8_t fldr = getNum('\0', 2);
-      Serial.print(F("\n>Query Folder Files Count "));
-      Serial.print(fldr);
+      Console.print(F("\n>Query Folder Files Count "));
+      Console.print(fldr);
       return(mp3.queryFolderFiles(fldr));
     }
 
-  default: Serial.print(F("\n>Query ?")); Serial.print(c);
+  default: Console.print(F("\n>Query ?")); Console.print(c);
   }
 
   return(false);
@@ -267,30 +281,30 @@ bool processCmd(void)
     case 'V': bRet = processVolume(); break;
     case 'Q': bRet = processQuery(); break;
 
-    case 'S': Serial.print(F("\n>Sleep"));   bRet = mp3.sleep();  break;
-    case 'W': Serial.print(F("\n>Wake up")); bRet = mp3.wakeUp(); break;
-    case 'Z': Serial.print(F("\n>Reset"));   bRet = mp3.reset();  break;
+    case 'S': Console.print(F("\n>Sleep"));   bRet = mp3.sleep();  break;
+    case 'W': Console.print(F("\n>Wake up")); bRet = mp3.wakeUp(); break;
+    case 'Z': Console.print(F("\n>Reset"));   bRet = mp3.reset();  break;
     case 'E': 
     {
       uint8_t e = getNum('\0', 1);
-      Serial.print(F("\n>Equalizer "));
-      Serial.print(e);
+      Console.print(F("\n>Equalizer "));
+      Console.print(e);
       return(mp3.equalizer(e));
     }
 
     case 'X':
     {
       uint8_t cmd = getNum('\0', 1);
-      Serial.print(F("\n>Shuffle "));
-      Serial.print(cmd);
+      Console.print(F("\n>Shuffle "));
+      Console.print(cmd);
       return(mp3.shuffle(cmd != 0));
     }
 
     case 'R':
     {
       uint8_t cmd = getNum('\0', 1);
-      Serial.print(F("\n>Repeat "));
-      Serial.print(cmd);
+      Console.print(F("\n>Repeat "));
+      Console.print(cmd);
       return(mp3.repeat(cmd != 0));
     }
 
@@ -307,7 +321,7 @@ bool processCmd(void)
     }
     break;
 
-    default: Serial.print(F("\n>Command ?")); Serial.print(c); break;
+    default: Console.print(F("\n>Command ?")); Console.print(c); break;
     }
   }
 
@@ -316,12 +330,15 @@ bool processCmd(void)
 
 void setup()
 {
-  Serial.begin(57600);
+  // YX5300 Serial interface
+  MP3Stream.begin(MD_YX5300::SERIAL_BPS);
   mp3.begin();
-
-  help();
   setCallbackMode(bUseCallback);
   setSynchMode(bUseSynch);
+
+  // command line interface
+  Console.begin(57600);
+  help();
 }
 
 void loop()

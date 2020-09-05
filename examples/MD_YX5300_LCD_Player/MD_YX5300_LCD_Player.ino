@@ -22,24 +22,38 @@
 // this (and initialization parameters) for your specific type of LCD display. The rest should
 // work as is.
 
+#ifndef USE_SOFTWARESERIAL
+#define USE_SOFTWARESERIAL 1   ///< Set to 1 to use SoftwareSerial library, 0 for native serial port
+#endif
+
 #include <MD_YX5300.h>
 #include <MD_REncoder.h>
 #include <MD_UISwitch.h>
 #include <LiquidCrystal_SR.h>
 
+#if USE_SOFTWARESERIAL
+#include <SoftwareSerial.h>
+
 // Connections for serial interface to the YX5300 module
 const uint8_t ARDUINO_RX = 4;    // connect to TX of MP3 Player module
 const uint8_t ARDUINO_TX = 5;    // connect to RX of MP3 Player module
 
+SoftwareSerial  MP3Stream(ARDUINO_RX, ARDUINO_TX);  // MP3 player serial stream for comms
+#define Console Serial           // command processor input/output stream
+#else
+#define MP3Stream Serial2  // Native serial port - change to suit the application
+#define Console   Serial   // command processor input/output stream
+#endif
+
 const uint8_t PLAY_FOLDER = 1;   // tracks are all placed in this folder
 
 // Play mode switch
-const uint8_t SW_PLAY_MODE = 2;  // play mode toggle switch, active low (internal PULLUP)
+const uint8_t SW_PLAY_MODE = 6;  // play mode toggle switch, active low (internal PULLUP)
 
  // Rotary Encoder
-const uint8_t SW_RE_MODE = 3;    // switch on the rotary encoder, active low (internal PULLUP)
-const uint8_t RE_A = 6;          // Rotary encoder A pin
-const uint8_t RE_B = 7;          // Rotary encoder B pin
+const uint8_t SW_RE_MODE = 7;    // switch on the rotary encoder, active low (internal PULLUP)
+const uint8_t RE_A = 2;          // Rotary encoder A pin
+const uint8_t RE_B = 3;          // Rotary encoder B pin
 
 // LCD with serial backpack pins
 // This and the class initailiser will need to change if the LCD module has a different interface
@@ -50,12 +64,12 @@ const uint8_t LCD_COLS = 16;     // LCD number of columns
 const uint8_t LCD_ROWS = 2;      // LCD number of rows
 
 // Enable debug output - set to non-zero value to enable.
-#define DEBUG 0
+#define DEBUG 1
 
 #ifdef DEBUG
-#define PRINT(s,v)    { Serial.print(F(s)); Serial.print(v); }
-#define PRINTX(s,v)   { Serial.print(F(s)); Serial.print(v, HEX); }
-#define PRINTS(s)     { Serial.print(F(s)); }
+#define PRINT(s,v)    { Console.print(F(s)); Console.print(v); }
+#define PRINTX(s,v)   { Console.print(F(s)); Console.print(v, HEX); }
+#define PRINTS(s)     { Console.print(F(s)); }
 #else
 #define PRINT(s,v)
 #define PRINTX(s,v)
@@ -63,7 +77,7 @@ const uint8_t LCD_ROWS = 2;      // LCD number of rows
 #endif
 
 // Define global variables
-MD_YX5300 mp3(ARDUINO_RX, ARDUINO_TX);
+MD_YX5300 mp3(MP3Stream);
 MD_UISwitch_Digital swPlayMode(SW_PLAY_MODE);
 MD_UISwitch_Digital swREMode(SW_RE_MODE);
 MD_REncoder re(RE_A, RE_B);
@@ -130,7 +144,7 @@ bool initData(bool reset = false)
   static uint8_t state = 0;
   bool b = true;
 
-  if (reset)    // just rest the sequencing
+  if (reset)    // just reset the sequencing
   {
     state = 0;
   }
@@ -178,25 +192,32 @@ void selectNextSong(int direction = 0)
 {
   switch (S.playMode)
   {
-  case M_SHUFFLE:   // random selection
-    {
-      uint16_t x = random(S.numTracks) + 1;
-      mp3.playTrack(x);
-      PRINT("\nPlay SHUFFLE ", x);
-    }
-    break;
-
-  case M_LOOP:      // replay the same track
-      mp3.playTrack(S.curTrack);
-      PRINTS("\nPlay LOOP");
+    case M_SHUFFLE:   // random selection
+      {
+        uint16_t x = random(S.numTracks) + 1;
+        mp3.playTrack(x);
+        PRINT("\nPlay SHUFFLE ", x);
+      }
       break;
 
-  case M_SEQ:       // play sequential - next/previous
-      if (direction < 0) 
-        mp3.playPrev(); 
-      else  
-        mp3.playNext();
-      PRINTS("\nPlay SEQ");
+    case M_LOOP:      // replay the same track
+      {
+        mp3.playTrack(S.curTrack);
+        PRINTS("\nPlay LOOP");
+      }
+      break;
+
+    case M_SEQ:       // play sequential - next/previous
+      {
+        if (direction < 0)
+          mp3.playPrev();
+        else
+          mp3.playNext();
+        PRINTS("\nPlay SEQ");
+      }
+      break;
+
+    default:    // do nothing
       break;
   }
   mp3.queryFile();    // force index the update in callback
@@ -275,6 +296,9 @@ void processPlayMode(void)
       if (mp3.playStart()) S.playStatus = S_PLAYING;
       PRINTS("\nSwitched to PLAY");
       break;
+
+    default:  // do nothing
+      break;
     }
     S.needUpdate = true;
     break;
@@ -285,8 +309,12 @@ void processPlayMode(void)
     case M_SEQ:     S.playMode = M_LOOP;    PRINTS("\nMode LOOP");    break;
     case M_LOOP:    S.playMode = M_SHUFFLE; PRINTS("\nMode SHUFFLE"); break;
     case M_SHUFFLE: S.playMode = M_SEQ;     PRINTS("\nMode SINGLE");  break;
+    default: break; // do nothing
     }
     S.needUpdate = true;
+    break;
+
+  default:    // do nothing
     break;
   }
 }
@@ -429,11 +457,12 @@ void displayUpdate(void)
 void setup(void)
 {
 #if DEBUG
-  Serial.begin(57600);
+  Console.begin(57600);
 #endif
   PRINTS("\n[MD_YX5300 LCD Player]");
 
   // Initialize global libraries
+  MP3Stream.begin(MD_YX5300::SERIAL_BPS);
   mp3.begin();
   mp3.setSynchronous(true);
   mp3.setCallback(cbResponse);

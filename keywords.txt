@@ -57,6 +57,7 @@ queryFile	KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
+SERIAL_BPS	LITERAL1
 STS_OK	LITERAL1
 STS_TIMEOUT	LITERAL1
 STS_VERSION	LITERAL1

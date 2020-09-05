@@ -1,17 +1,8 @@
 #pragma once
 #include <Arduino.h>
 
-#ifndef SOFTWARESERIAL
-#define USE_SOFTWARESERIAL 1   ///< Set to 1 to use SoftwareSerial library, 0 for native serial port
-#endif
 #ifndef USE_CHECKSUM
 #define USE_CHECKSUM       1   ///< Set to 1 to enable checksums in messages, 0 to disable
-#endif
-
-#if USE_SOFTWARESERIAL
-#include <SoftwareSerial.h>
-#else
-#define _Serial Serial2      ///< Native serial port - can be changed to suit
 #endif
 
 /**
@@ -41,7 +32,7 @@ Module Interfaces
 
 - __Control interface__ is a UART TTL interface (GND, VCC, TX, RX). Pins are connected 
 GND to MCU ground, VCC to 5V power supply, YX5300 TX (transmit) to the designated 
-RX (receive) pin for the SoftwareSerial library, YX5300 RX to SoftwareSerial TX.
+RX (receive) pin on the MCU, YX5300 RX to the TX pin on the MCU.
 - __TF card socket__ on the reverse side of the PCB for plugging in the micro SD 
 card with MP3/WAV files.
 - __Playback indicator__ (green LED) blinks during playback, steady otherwise.
@@ -74,13 +65,6 @@ An example of the folder and files on the micro SD card might look like:
       + 007-Mamma_Mia.mp3
 ~~~~
 
-Library Dependencies
---------------------
-The library used the _SoftwareSerial_ library to manage the serial interface to the
-MP3 player. If more than one hardware Serial port is available this may be used but 
-requires changing the alternative code switched by the C++ macro define 
-USE_SOFTWARESERIAL at the top of the library header file.
-
 Topics
 ------
 - \subpage pageSoftware
@@ -99,6 +83,34 @@ hardware (Chinese translation is ambiguous).
 
 \page pageDonation Support the Library
 If you like and use this library please consider making a small donation using [PayPal](https://paypal.me/MajicDesigns/4USD)
+
+\page pageRevisionHistory Revision History
+Sep 2020 version 1.3
+- Output stream now passed to class constructor - more flexibility
+
+Jul 2020 version 1.2.4
+- Fixed ESP32 compiler tantrums
+
+Sep 2019 version 1.2.3
+- Fixed Serial #define issue
+
+May 2019 version 1.2.2
+- More documentation clarifications
+
+Apr 2019 version 1.2.0, 1.2.1
+- Added Simple player example
+- Added LCD player example
+- Improved documentation for message flow
+
+Feb 2019 version 1.1.0
+- Fixed some issues with handling device initialization status messages at begin()
+- Added 20ms delay to serial write to prevent timeouts as the device needs 10ms to process the serial request.
+
+Oct 2018 version 1.0.1
+- Duplicate _S in the ESP8266 library fixed
+
+Jul 2018 version 1.0.0
+- First Release
 
 \page pageOtherLinks Other Useful Links
 ArduinoPlusPlus Blog:
@@ -359,31 +371,6 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, a copy is available at 
 https://www.gnu.org/licenses/lgpl-3.0.txt
-
-\page pageRevisionHistory Revision History
-Jul 2020 version 1.2.4
-- Fixed ESP32 compiler tantrums
-
-Sep 2019 version 1.2.3
-- Fixed Serial #define issue
-
-May 2019 version 1.2.2
-- More documentation clarifications
-
-Apr 2019 version 1.2.0, 1.2.1
-- Added Simple player example
-- Added LCD player example
-- Improved documentation for message flow
-
-Feb 2019 version 1.1.0
-- Fixed some issues with handling device initialization status messages at begin()
-- Added 20ms delay to serial write to prevent timeouts as the device needs 10ms to process the serial request.
-
-Oct 2018 version 1.0.1
-- Duplicate _S in the ESP8266 library fixed
-
-Jul 2018 version 1.0.0
-- First Release
 */
 
 /**
@@ -392,6 +379,11 @@ Jul 2018 version 1.0.0
 class MD_YX5300
 {
 public:
+  /**
+  * Speed for the serial interfac e on the YX5300
+  */
+  static const uint16_t SERIAL_BPS = 9600;
+
   /**
   * Status code enumerated type specification.
   *
@@ -454,18 +446,15 @@ public:
   *
   * Instantiate a new instance of the class. The parameters passed are used to
   * connect the software to the hardware.
+  * 
+  * The Stream object passed to the constructor must be initialized in the main
+  * application. For convenience the constant SERIAL_BPS can be used for consistency
+  * when setting the serial interface speed.
   *
-  * Parameters are required for SoftwareSerial initialization. If native
-  * serial port is used then dummy parameters need to be supplied.
-  *
-  * \param pinRx The pin for receiving serial data, connected to the device Tx pin.
-  * \param pinTx The pin for sending serial data, connected to the device Rx pin.
+  * \param S Serial stream to be used for the connection to the device.
   */
-  MD_YX5300(uint8_t pinRx, uint8_t pinTx) : 
-#if USE_SOFTWARESERIAL
-    _Serial(pinRx, pinTx),
-#endif
-    _cbStatus(nullptr), _synch(true), _timeout(1000)
+  MD_YX5300(Stream& S) :
+    _S(S), _cbStatus(nullptr), _synch(true), _timeout(1000)
     {};
 
  /**
@@ -473,6 +462,9 @@ public:
   *
   * Release any necessary resources and and does the necessary to clean up once 
   * the object is no longer required.
+  * 
+  * Note that output stream is not managed by this destructor and should be
+  * handled in the application.
   */
   ~MD_YX5300(void) {};
   
@@ -1117,10 +1109,7 @@ private:
   const uint8_t PKT_EOM = 0xef;       ///< End of message delimiter character
 
   // variables
-#if USE_SOFTWARESERIAL
-  SoftwareSerial  _Serial; ///< used for communications
-#endif
-
+  Stream& _S;    ///< Serial stream for the MP3 player
   void(*_cbStatus)(const cbData *data); ///< callback function
   cbData _status;     ///< callback status data
 
