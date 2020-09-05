@@ -64,7 +64,7 @@ const uint8_t LCD_COLS = 16;     // LCD number of columns
 const uint8_t LCD_ROWS = 2;      // LCD number of rows
 
 // Enable debug output - set to non-zero value to enable.
-#define DEBUG 1
+#define DEBUG 0
 
 #ifdef DEBUG
 #define PRINT(s,v)    { Console.print(F(s)); Console.print(v); }

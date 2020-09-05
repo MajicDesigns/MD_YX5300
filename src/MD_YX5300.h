@@ -86,7 +86,8 @@ If you like and use this library please consider making a small donation using [
 
 \page pageRevisionHistory Revision History
 Sep 2020 version 1.3
-- Output stream now passed to class constructor - more flexibility
+- Output stream now passed to class constructor, not built-in
+- Test example changed over the use MD_cmdProcessor
 
 Jul 2020 version 1.2.4
 - Fixed ESP32 compiler tantrums

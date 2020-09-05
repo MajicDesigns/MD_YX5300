@@ -35,9 +35,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 #if LIBDEBUG
 #define DBGStream Serial
 
-#define PRINT(s, v)   { DBGStream.print(F(s)); DBGStream.print(v); }      ///< Print a string followed by a value (decimal)
-#define PRINTX(s, v)  { DBGStream.print(F(s)); DBGStream.print(v, HEX); } ///< Print a string followed by a value (hex)
-#define PRINTS(s)     { DBGStream.print(F(s)); }                          ///< Print a string
+#define PRINT(s, v)   do { DBGStream.print(F(s)); DBGStream.print(v); } while (false);      ///< Print a string followed by a value (decimal)
+#define PRINTX(s, v)  do { DBGStream.print(F(s)); DBGStream.print(v, HEX); } while (false); ///< Print a string followed by a value (hex)
+#define PRINTS(s)     do { DBGStream.print(F(s)); } while (false);                          ///< Print a string
 #else
 #define PRINT(s, v)   ///< Print a string followed by a value (decimal)
 #define PRINTX(s, v)  ///< Print a string followed by a value (hex)

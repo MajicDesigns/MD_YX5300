@@ -2,12 +2,16 @@
 //
 // Menu driven interface using the Serial Monitor to test individual functions.
 //
+// Dependencies
+// MD_cmdProcessor library found at https://github.com/MajicDesigns/MD_cmdProcessor
+//
 
-#ifndef SOFTWARESERIAL
+#ifndef USE_SOFTWARESERIAL
 #define USE_SOFTWARESERIAL 1   ///< Set to 1 to use SoftwareSerial library, 0 for native serial port
 #endif
 
 #include <MD_YX5300.h>
+#include <MD_cmdProcessor.h>
 
 #if USE_SOFTWARESERIAL
 #include <SoftwareSerial.h>
@@ -22,6 +26,9 @@ SoftwareSerial  MP3Stream(ARDUINO_RX, ARDUINO_TX);  // MP3 player serial stream 
 #define MP3Stream Serial2  // Native serial port - change to suit the application
 #define Console   Serial   // command processor input/output stream
 #endif
+
+#define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
+#define CMD(s) { Console.print(F("\n>")); Console.print(F(s)); Console.print(F(" ")); }
 
 // Define YX5300 global variables
 MD_YX5300 mp3(MP3Stream);
@@ -66,7 +73,7 @@ void cbResponse(const MD_YX5300::cbData *status)
 void setCallbackMode(bool b)
 {
   bUseCallback = b;
-  Console.print(F("\n>Callback "));
+  CMD("Callback");
   Console.print(b ? F("ON") : F("OFF"));
   mp3.setCallback(b ? cbResponse : nullptr);
 }
@@ -74,258 +81,228 @@ void setCallbackMode(bool b)
 void setSynchMode(bool b)
 {
   bUseSynch = b;
-  Console.print(F("\n>Synchronous "));
+  CMD("Synchronous");
   Console.print(b ? F("ON") : F("OFF"));
   mp3.setSynchronous(b);
 }
 
-char getNextChar(bool block = false)
+
+char * getNum(char *cp, uint32_t &v, uint8_t base = 10)
 {
-  char c = '\0';
+  char* rp;
 
-  if (!block) return(Console.available() ? Console.read() : c);
+  v = strtoul(cp, &rp, base);
 
-  while (c == '\0')
-  {
-    if (Console.available())
-      c = Console.read();
-  }
-
-  return(c);
+  return(rp);
 }
 
-uint8_t c2i(char c)
-{
-  if (c < '0' || c > '9') return(0);
+// Command processor handlers
+void handlerHelp(char* param);
 
-  return(c - '0');
+void handlerP_bang(char* param) { CMD("Play Start"); mp3.playStart(); cbResponse(mp3.getStatus()); }
+void handlerPP(char* param)     { CMD("Play Pause"); mp3.playPause(); cbResponse(mp3.getStatus()); }
+void handlerPZ(char* param)     { CMD("Play Stop");  mp3.playStop();  cbResponse(mp3.getStatus()); }
+void handlerP_gt(char* param)   { CMD("Play Next");  mp3.playNext();  cbResponse(mp3.getStatus()); }
+void handlerP_lt(char* param)   { CMD("Play Prev");  mp3.playPrev();  cbResponse(mp3.getStatus()); }
+
+void handlerP(char* param)
+{
+  uint32_t t;
+  
+  getNum(param, t);
+  CMD("Play Track");
+  Console.print(t);
+  mp3.playTrack(t);
+  cbResponse(mp3.getStatus());
 }
 
-uint16_t getNum(char c, uint8_t dig)
+void handlerPT(char* param)
 {
-  uint16_t v = c2i(c);
+  uint32_t fldr, file;
 
-  if (c != '\0') dig--;    // first digit was passed in
-  for (uint8_t i = 0; i < dig; i++)
-    v = (v * 10) + c2i(getNextChar(true));
-
-  return(v);
+  param = getNum(param, fldr);
+  getNum(param, file);
+  CMD("Play Specific Fldr");
+  Console.print(fldr);
+  Console.print(F(", "));
+  Console.print(file);
+  mp3.playSpecific(fldr, file);
+  cbResponse(mp3.getStatus());
 }
 
-void help(void)
+void handlerPF(char* param)
 {
-  Console.print(F("\n[MD_YX5300 Test Menu]"));
-  Console.print(F("\nh,?\thelp"));
-  Console.print(F("\n\np!\tPlay"));
-  Console.print(F("\npyyy\tPlay file index yyy (0-255)"));
-  Console.print(F("\npp\tPlay Pause"));
-  Console.print(F("\npz\tPlay Stop"));
-  Console.print(F("\np>\tPlay Next"));
-  Console.print(F("\np<\tPlay Previous"));
-  Console.print(F("\nptxxyyy\tPlay Track folder xx, file yyy"));
-  Console.print(F("\npfxx\tPlay loop folder xx"));
-  Console.print(F("\npxaa\tPlay shuffle folder aa"));
-  Console.print(F("\npryyy\tPlay loop file index yyy"));
-  Console.print(F("\n\nv+\tVolume up"));
-  Console.print(F("\nv-\tVolume down"));
-  Console.print(F("\nvxx\tVolume set xx (max 30)"));
-  Console.print(F("\nvb\tVolume Mute on (b=1), off (b=0)"));
-  Console.print(F("\n\nqe\tQuery equalizer"));
-  Console.print(F("\nqf\tQuery current file"));
-  Console.print(F("\nqs\tQuery status"));
-  Console.print(F("\nqv\tQuery volume"));
-  Console.print(F("\nqx\tQuery folder count"));
-  Console.print(F("\nqy\tQuery total file count"));
-  Console.print(F("\nqzxx\tQuery files count in folder xx"));
-  Console.print(F("\n\ns\tSleep"));
-  Console.print(F("\nw\tWake up"));
-  Console.print(F("\nen\tEqualizer type n"));
-  Console.print(F("\nxb\tPlay Shuffle on (b=1), off (b=0)"));
-  Console.print(F("\nrb\tPlay Repeat on (b=1), off (b=0)"));
-  Console.print(F("\nz\tReset"));
-  Console.print(F("\nyb\tSynchronous mode on (b=1), off (b=0)"));
-  Console.print(F("\ncb\tCallback mode on (b=1), off (b=0)"));
-  Console.print(F("\n\n"));
+  uint32_t fldr;
+
+  getNum(param, fldr);
+  CMD("Play Folder");
+  Console.print(fldr);
+  mp3.playFolderRepeat(fldr);
+  cbResponse(mp3.getStatus());
 }
 
-bool processPlay(void)
-// Process the second level character(s) for the Play options
+void handlerPX(char* param)
 {
-  char c = getNextChar(true);
-
-  switch (toupper(c))
-  {
-    case '!': Console.print(F("\n> Play Start")); return(mp3.playStart());
-    case 'P': Console.print(F("\n>Play Pause")); return(mp3.playPause());
-    case 'Z': Console.print(F("\n>Play Stop")); return(mp3.playStop());
-    case '>': Console.print(F("\n>Play Next")); return(mp3.playNext());
-    case '<': Console.print(F("\n>Play Prev")); return(mp3.playPrev());
-    case '0'...'9':
-      {
-        uint8_t t = getNum(c, 3);
-        Console.print(F("\n>Play Track "));
-        Console.print(t);
-        return(mp3.playTrack(t));
-      }
-
-    case 'T':
-      {
-        uint8_t fldr = getNum('\0', 2);
-        uint8_t file = getNum('\0', 3);
-        Console.print(F("\n>Play Specific Fldr "));
-        Console.print(fldr);
-        Console.print(F(", "));
-        Console.print(file);
-        return(mp3.playSpecific(fldr, file));
-      }
-
-    case 'F':
-      {
-        uint8_t fldr = getNum('\0', 2);
-        Console.print(F("\n>Play Folder "));
-        Console.print(fldr);
-        return(mp3.playFolderRepeat(fldr));
-      }
-
-    case 'X':
-    {
-      uint8_t fldr = getNum('\0', 2);
-      Console.print(F("\n>Play Shuffle Folder "));
-      Console.print(fldr);
-      return(mp3.playFolderShuffle(fldr));
-    }
-
-    case 'R':
-    {
-      uint8_t file = getNum('\0', 3);
-      Console.print(F("\n>Play File repeat "));
-      Console.print(file);
-      return(mp3.playTrackRepeat(file));
-    }
-
-    default: Console.print(F("\n>Play ?")); Console.print(c); break;
-  }
-
-  return(false);
+  uint32_t fldr;
+  
+  getNum(param, fldr);
+  CMD("Play Shuffle Folder");
+  Console.print(fldr);
+  mp3.playFolderShuffle(fldr);
+  cbResponse(mp3.getStatus());
 }
 
-bool processVolume(void)
-// Process the second level character(s) for the Volume options
+void handlerPR(char* param)
 {
-  char c = getNextChar(true);
+  uint32_t file;
 
-  switch (toupper(c))
-  {
-  case '+': Console.print(F("\n>Volume Up"));  return(mp3.volumeInc());
-  case '-': Console.print(F("\n>Volume Down"));  return(mp3.volumeDec());
-  case 'M':
-    {
-      uint8_t cmd = getNum('\0', 1);
-      Console.print(F("\n>Volume Enable "));
-      Console.print(cmd);
-      return(mp3.volumeMute(cmd != 0));
-    }
-
-  default:
-    {
-      uint16_t v = getNum(c, 2);
-      Console.print(F("\n>Volume ")); 
-      Console.print(v);
-      return(mp3.volume(v)); 
-    }
-  }
-
-  return(false);
+  getNum(param, file);
+  CMD("Play File repeat");
+  Console.print(file);
+  mp3.playTrackRepeat(file);
+  cbResponse(mp3.getStatus());
 }
 
-bool processQuery(void)
-// Process the second level character(s) for the Query options
+
+void handlerVM(char *param)
 {
-  char c = getNextChar(true);
-
-  switch (toupper(c))
-  {
-  case 'E': Console.print(F("\n>Query Equalizer"));  return(mp3.queryEqualizer());
-  case 'F': Console.print(F("\n>Query File"));       return(mp3.queryFile());
-  case 'S': Console.print(F("\n>Query Status"));     return(mp3.queryStatus());
-  case 'V': Console.print(F("\n>Query Volume"));     return(mp3.queryVolume());
-  case 'X': Console.print(F("\n>Query Folder Count"));  return(mp3.queryFolderCount());
-  case 'Y': Console.print(F("\n>Query Tracks Count"));  return(mp3.queryFilesCount());
-  case 'Z': 
-    {
-      uint8_t fldr = getNum('\0', 2);
-      Console.print(F("\n>Query Folder Files Count "));
-      Console.print(fldr);
-      return(mp3.queryFolderFiles(fldr));
-    }
-
-  default: Console.print(F("\n>Query ?")); Console.print(c);
-  }
-
-  return(false);
+  uint32_t cmd;
+  
+  getNum(param, cmd);
+  CMD("Volume Enable");
+  Console.print(cmd);
+  mp3.volumeMute(cmd != 0);
+  cbResponse(mp3.getStatus());
 }
 
-bool processCmd(void)
-// Process the top level character(s) for the main menu
+void handlerV(char *param)
 {
-  bool bRet = false;
-  char c = getNextChar();
+  uint32_t v;
+  
+  getNum(param, v);
+  CMD("Volume"); 
+  Console.print(v);
+  mp3.volume(v); 
+  cbResponse(mp3.getStatus());
+}
 
-  if (c != '\0')
-  {
-    switch (toupper(c))
-    {
-    case '?':
-    case 'H': help(); break;
-    case 'P': bRet = processPlay(); break;
-    case 'V': bRet = processVolume(); break;
-    case 'Q': bRet = processQuery(); break;
+void handlerV_plus(char* param)  { CMD("Volume Up");   mp3.volumeInc(); cbResponse(mp3.getStatus()); }
+void handlerV_minus(char* param) { CMD("Volume Down"); mp3.volumeDec(); cbResponse(mp3.getStatus()); }
 
-    case 'S': Console.print(F("\n>Sleep"));   bRet = mp3.sleep();  break;
-    case 'W': Console.print(F("\n>Wake up")); bRet = mp3.wakeUp(); break;
-    case 'Z': Console.print(F("\n>Reset"));   bRet = mp3.reset();  break;
-    case 'E': 
-    {
-      uint8_t e = getNum('\0', 1);
-      Console.print(F("\n>Equalizer "));
-      Console.print(e);
-      return(mp3.equalizer(e));
-    }
+void handlerQE(char* param) { CMD("Query Equalizer");    mp3.queryEqualizer();   cbResponse(mp3.getStatus()); }
+void handlerQF(char* param) { CMD("Query File");         mp3.queryFile();        cbResponse(mp3.getStatus()); }
+void handlerQS(char* param) { CMD("Query Status");       mp3.queryStatus();      cbResponse(mp3.getStatus()); }
+void handlerQV(char* param) { CMD("Query Volume");       mp3.queryVolume();      cbResponse(mp3.getStatus()); }
+void handlerQX(char* param) { CMD("Query Folder Count"); mp3.queryFolderCount(); cbResponse(mp3.getStatus()); }
+void handlerQY(char* param) { CMD("Query Tracks Count"); mp3.queryFilesCount();  cbResponse(mp3.getStatus()); }
 
-    case 'X':
-    {
-      uint8_t cmd = getNum('\0', 1);
-      Console.print(F("\n>Shuffle "));
-      Console.print(cmd);
-      return(mp3.shuffle(cmd != 0));
-    }
+void handlerQZ(char* param)
+{
+  uint32_t fldr;
+  
+  getNum(param, fldr);
+  CMD("Query Folder Files Count");
+  Console.print(fldr);
+  mp3.queryFolderFiles(fldr);
+  cbResponse(mp3.getStatus());
+}
 
-    case 'R':
-    {
-      uint8_t cmd = getNum('\0', 1);
-      Console.print(F("\n>Repeat "));
-      Console.print(cmd);
-      return(mp3.repeat(cmd != 0));
-    }
+void handlerS(char *param) { CMD("Sleep");   mp3.sleep();  cbResponse(mp3.getStatus()); }
+void handlerW(char *param) { CMD("Wake up"); mp3.wakeUp(); cbResponse(mp3.getStatus()); }
+void handlerZ(char *param) { CMD("Reset");   mp3.reset();  cbResponse(mp3.getStatus()); }
 
-    case 'Y':
-    {
-      uint8_t cmd = getNum('\0', 1);
-      setSynchMode(cmd != 0);
-    }
-    break;
-    case 'C':
-    {
-      uint8_t cmd = getNum('\0', 1);
-      setCallbackMode(cmd != 0);
-    }
-    break;
+void handlerE(char *param)
+{
+  uint32_t e;
 
-    default: Console.print(F("\n>Command ?")); Console.print(c); break;
-    }
-  }
+  getNum(param, e);
+  CMD("Equalizer");
+  Console.print(e);
+  mp3.equalizer(e);
+  cbResponse(mp3.getStatus());
+}
 
-  return(bRet);
+void handlerX(char *param)
+{
+  uint32_t cmd;
+
+  getNum(param, cmd);
+  CMD("Shuffle");
+  Console.print(cmd);
+  mp3.shuffle(cmd != 0);
+  cbResponse(mp3.getStatus());
+}
+
+void handlerR(char* param)
+{
+  uint32_t cmd;
+
+  getNum(param, cmd);
+  CMD("Repeat");
+  Console.print(cmd);
+  mp3.repeat(cmd != 0);
+  cbResponse(mp3.getStatus());
+}
+
+void handlerY(char *param)
+{
+  uint32_t cmd;
+  
+  getNum(param, cmd);
+  setSynchMode(cmd != 0);
+}
+
+void handlerC(char * param)
+{
+  uint32_t cmd;
+
+  getNum(param, cmd);
+  setCallbackMode(cmd != 0);
+}
+
+const MD_cmdProcessor::cmdItem_t PROGMEM cmdTable[] =
+{
+  { "?",  handlerHelp,    "",     "Help", 0 },
+  { "h",  handlerHelp,    "",     "Help", 0 },
+  { "p!", handlerP_bang,  "",     "Play", 1 },
+  { "p",  handlerP,       "n",    "Play file index n (0-255)", 1 },
+  { "pp", handlerPP,      "",     "Play Pause", 1 },
+  { "pz", handlerPZ,      "",     "Play Stop", 1 },
+  { "p>", handlerP_gt,    "",     "Play Next", 1 },
+  { "p<", handlerP_lt,    "",     "Play Previous", 1 },
+  { "pt", handlerPT,      "f n",  "Play Track folder f, file n", 1 },
+  { "pf", handlerPF,      "f",    "Play loop folder f", 1 },
+  { "px", handlerPX,      "f",    "Play shuffle folder f", 1 },
+  { "pr", handlerPR,      "n",    "Play loop file index n", 1 },
+  { "v+", handlerV_plus,  "",     "Volume up", 2 },
+  { "v-", handlerV_minus, "",     "Volume down", 2 },
+  { "v",  handlerV,       "x",    "Volume set x (0-30)", 2 },
+  { "vm", handlerVM,      "b",     "Volume Mute on (b=1), off (0)", 2 },
+  { "qe", handlerQE,      "",     "Query equalizer", 3 },
+  { "qf", handlerQF,      "",     "Query current file", 3 },
+  { "qs", handlerQS,      "",     "Query status", 3 },
+  { "qv", handlerQV,      "",     "Query volume", 3 },
+  { "qx", handlerQX,      "",     "Query folder count", 3 },
+  { "qy", handlerQY,      "",     "Query total file count", 3 },
+  { "qz", handlerQZ,      "f",    "Query files count in folder f", 3 },
+  { "s",  handlerS,       "",     "Sleep", 4 },
+  { "w",  handlerW,       "",     "Wake up", 4 },
+  { "e",  handlerE,       "n",    "Equalizer type n", 5 },
+  { "x",  handlerX,       "b",    "Play Shuffle on (b=1), off (0)", 5 },
+  { "r",  handlerR,       "b",    "Play Repeat on (b=1), off (0)", 5 },
+  { "z",  handlerZ,       "",     "Reset", 5 },
+  { "y",  handlerY,       "b",    "Synchronous mode on (b=1), off (0)", 6 },
+  { "c",  handlerC,       "b",    "Callback mode on (b=1), off (0)", 6 },
+};
+
+MD_cmdProcessor CP(Console, cmdTable, ARRAY_SIZE(cmdTable));
+
+// handler functions
+void handlerHelp(char* param)
+{
+  Console.print(F("\n[MD_YX5300 Test]\nSet Serial line ending to newline."));
+  CP.help();
+  Console.print(F("\n"));
 }
 
 void setup()
@@ -338,13 +315,12 @@ void setup()
 
   // command line interface
   Console.begin(57600);
-  help();
+  CP.begin();
+  CP.help();
 }
 
 void loop()
 {
-  if (processCmd() && !bUseCallback)
-    cbResponse(mp3.getStatus());
-
+  CP.run();
   mp3.check();
 }
