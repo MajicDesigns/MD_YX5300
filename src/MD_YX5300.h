@@ -85,7 +85,10 @@ hardware (Chinese translation is ambiguous).
 If you like and use this library please consider making a small donation using [PayPal](https://paypal.me/MajicDesigns/4USD)
 
 \page pageRevisionHistory Revision History
-Sep 2020 version 1.3
+Oct 2020 version 1.3.1
+- Duplicate _S in the ESP8266 library fixed (again)
+
+Sep 2020 version 1.3.0
 - Output stream now passed to class constructor, not built-in
 - Test example changed over the use MD_cmdProcessor
 
@@ -455,7 +458,7 @@ public:
   * \param S Serial stream to be used for the connection to the device.
   */
   MD_YX5300(Stream& S) :
-    _S(S), _cbStatus(nullptr), _synch(true), _timeout(1000)
+    _Out(S), _cbStatus(nullptr), _synch(true), _timeout(1000)
     {};
 
  /**
@@ -1110,7 +1113,7 @@ private:
   const uint8_t PKT_EOM = 0xef;       ///< End of message delimiter character
 
   // variables
-  Stream& _S;    ///< Serial stream for the MP3 player
+  Stream& _Out;    ///< Serial stream for the MP3 player
   void(*_cbStatus)(const cbData *data); ///< callback function
   cbData _status;     ///< callback status data
 
