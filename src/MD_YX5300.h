@@ -65,6 +65,8 @@ An example of the folder and files on the micro SD card might look like:
       + 007-Mamma_Mia.mp3
 ~~~~
 
+There can be a maximum of 99 folders, and each folder can hold up to 255 songs.
+
 Topics
 ------
 - \subpage pageSoftware
