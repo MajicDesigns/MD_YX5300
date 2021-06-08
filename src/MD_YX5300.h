@@ -15,13 +15,13 @@
 The MD_YX5300 Library
 ---------------------
 This library implements functions to control RS232 Serial MP3 players based 
-on the YX5300 IC. These are often sold as "Catalex" Serial MP3 players and look 
-like the device in the photo below. This library manages the serial interface and 
-request/response sequences, simplifying running the device as a background task.
+on the YX5300 and YX6300 ICs. These are often sold as "Catalex" Serial MP3 players
+and look like the device in the photo below. This library manages the serial interface
+and request/response sequences, simplifying running the device as a background task.
 
 ![YX5300 Serial MP3 Player] (YX5300_Serial_MP3_Player.jpg "YX5300 Serial MP3 Player")
 
-The YX5300 supports 8kHz to 48kHz sampling frequency MP3 and WAV file formats. 
+The YX5300/YX6300 supports 8kHz to 48kHz sampling frequency MP3 and WAV file formats. 
 The audio files are stored on a micro SD card that plugs into a TF card socket on 
 the back of the board. The MCU controls the MP3 playback by sending serial commands 
 to the module via the UART port.
