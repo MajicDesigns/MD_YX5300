@@ -630,7 +630,7 @@ public:
   * Set equalizer mode.
   *
   * Set the equalizer mode to one of the preset types - 
-  * 0:Normal, 1:Pop, 2:Rock, 3:Jazz, 4:Classic or 5:Base
+  * 0:Normal, 1:Pop, 2:Rock, 3:Jazz, 4:Classic or 5:Bass
   * 
   * \sa check(), getStatus(), setSynchronous()
   *
@@ -981,7 +981,7 @@ public:
   * Request the current equalizer setting from the device.
   * The response will be in an unsolicited message following the initial request.
   *
-  * - cbData.code is STS_?? (unknown).
+  * - cbData.code is STS_EQUALIZER.
   * - cbData.data is the equalizer setting.
   *
   * \sa check(), getStatus(), setSynchronous()
